@@ -215,6 +215,8 @@ namespace big
 		static void* create_pool_item(GenericPool* pool);
 
 		static bool network_can_access_multiplayer(void* a1, int* error);
+
+		static void send_clone_create(CNetworkObjectMgr* _this, rage::netObject* object, CNetGamePlayer* player, rage::datBitBuffer* buffer);
 	};
 
 	class minhook_keepalive

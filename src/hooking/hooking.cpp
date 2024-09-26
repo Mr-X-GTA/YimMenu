@@ -158,6 +158,8 @@ namespace big
 
 		detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);
 
+		detour_hook_helper::add<hooks::send_clone_create>("SCC", g_pointers->m_gta.m_send_clone_create);
+
 		g_hooking = this;
 	}
 

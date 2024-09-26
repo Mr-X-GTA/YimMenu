@@ -432,4 +432,27 @@ namespace big::entity
 			if (auto object = (*g_pointers->m_gta.m_network_object_mgr)->find_object_by_id(net_id, true))
 				(*g_pointers->m_gta.m_network_object_mgr)->UnregisterNetworkObject(object, 8, true, true);
 	}
+
+	void force_remove_network_entity(rage::CDynamicEntity* entity, player_ptr for_player)
+	{
+		auto net_obj = entity->m_net_object;
+
+		if (!net_obj)
+			return;
+
+		char buf[0x200]{};
+		rage::datBitBuffer remove_buf(buf, sizeof(buf));
+
+		remove_buf.Write<std::uint16_t>(net_obj->m_object_id, 13);
+		remove_buf.Write<uint32_t>(get_next_token_value(net_obj->m_ownership_token), 5);
+
+		packet pack;
+		pack.write_message(rage::eNetMessage::MsgPackedReliables);
+		pack.write<int>(4, 4); // remove
+		pack.write<int>(1, 5); // msgs_written
+		pack.write<int>(remove_buf.GetPosition(), 13);
+		pack.m_buffer.WriteArray(&buf, remove_buf.GetPosition());
+
+		pack.send(for_player->get_net_game_player()->m_msg_id);
+	}
 }
