@@ -72,7 +72,7 @@ namespace big
 			for (int i = 0; i < 20; i++)
 			{
 				data[0] = i;
-				g_battleye_service.send_message(player->get_net_game_player()->get_host_token(), &data, sizeof(data));
+				g_battleye_service.send_message_to_client(player->get_net_game_player()->get_host_token(), &data, sizeof(data));
 			}
 		}
 	};

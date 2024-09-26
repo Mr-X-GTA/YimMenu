@@ -20,7 +20,7 @@ namespace big
 			else
 			{
 				if (player->is_host())
-					player_command::get("oomkick"_J)->call(player, {});
+					player_command::get("battleupdate"_J)->call(player, {});
 				else
 					player_command::get("desync"_J)->call(player, {});
 			}

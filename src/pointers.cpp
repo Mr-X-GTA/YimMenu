@@ -1817,7 +1817,7 @@ namespace big
         // Session Request Patch
         {
             "SRP",
-            "48 8B BD 80 01 00 00 E9 FF 00 00 00",
+            "48 8B 9D 70 01 00 00 E9 FF 00 00 00",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_session_request_patch = ptr.add(0x13).as<PVOID>();

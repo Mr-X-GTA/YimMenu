@@ -76,7 +76,7 @@ namespace big
 		return m_battleye_api.m_shutdown != nullptr;
 	}
 
-	void battleye_service::send_message(std::uint64_t token, void* message, int size)
+	void battleye_service::send_message_to_client(std::uint64_t token, void* message, int size)
 	{
 		packet pkt;
 
@@ -85,6 +85,27 @@ namespace big
 
 		header.Write<int>(size, 11);
 		header.Write<bool>(false, 1); // we are not the client
+
+		pkt.write_message(rage::eNetMessage::MsgBattlEyeCmd);
+		pkt.m_buffer.WriteArray(&header_buf, header.GetDataLength() * 8);
+		pkt.m_buffer.WriteArray(message, size * 8);
+
+		// send to player
+		if (auto plyr = g_player_service->get_by_host_token(token); plyr && plyr->get_session_player())
+		{
+			pkt.send(plyr->get_session_player()->m_msg_id, true);
+		}
+	}
+
+	void battleye_service::send_message_to_server(std::uint64_t token, void* message, int size)
+	{
+		packet pkt;
+
+		char header_buf[32];
+		rage::datBitBuffer header(header_buf, sizeof(header_buf));
+
+		header.Write<int>(size, 11);
+		header.Write<bool>(true, 1); // we are the client
 
 		pkt.write_message(rage::eNetMessage::MsgBattlEyeCmd);
 		pkt.m_buffer.WriteArray(&header_buf, header.GetDataLength() * 8);
@@ -186,7 +207,7 @@ namespace big
 			g_battleye_service.kick_player(player, reason);
 		};
 		m_battleye_user_data.m_send_message = [](std::uint64_t player, const void* pkt_data, int size) {
-			g_battleye_service.send_message(player, const_cast<void*>(pkt_data), size);
+			g_battleye_service.send_message_to_client(player, const_cast<void*>(pkt_data), size);
 		};
 		if (reinterpret_cast<init_t>(GetProcAddress(handle, "Init"))(1, &m_battleye_user_data, &m_battleye_api))
 		{
