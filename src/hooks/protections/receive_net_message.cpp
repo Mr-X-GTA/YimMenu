@@ -711,9 +711,6 @@ namespace big
 			{
 				if (g.session.log_chat_messages)
 					chat::log_chat(message, player, spam_reason, is_team);
-				g_notification_service.push("PROTECTIONS"_T.data(),
-
-				    std::format("{} {}", player->get_name(), "IS_A_SPAMMER"_T.data()));
 				player->is_spammer = true;
 				g.reactions.chat_spam.process(player);
 				return true;
