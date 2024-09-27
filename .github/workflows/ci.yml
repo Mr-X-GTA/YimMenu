@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   ci:
-    runs-on: [self-hosted, Windows]
+    runs-on: windows-latest
     name: CI
     steps:
       - uses: actions/checkout@v3
