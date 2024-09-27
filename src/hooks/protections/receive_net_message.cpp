@@ -10,6 +10,7 @@
 #include "services/players/player_service.hpp"
 #include "services/battleye/battleye_service.hpp"
 #include "util/chat.hpp"
+#include "util/entity.hpp"
 #include "util/session.hpp"
 #include "gta/net_object_mgr.hpp"
 
@@ -753,8 +754,12 @@ namespace big
 			{
 				g_battleye_service.receive_message(player->get_net_game_player()->get_host_token(), &data, size);
 			}
-			else if (player)
+			else if (player && !player->bad_host)
 			{
+				player->bad_host = true;
+				g_fiber_pool->queue_job([player] {
+					entity::force_remove_network_entity(g_local_player, player, false);
+				});
 				g_battleye_service.send_message_to_server(player->get_net_game_player()->get_host_token(), &data, size);
 			}
 

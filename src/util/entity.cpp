@@ -60,7 +60,7 @@ namespace big::entity
 		{
 			if (ptr->m_net_object)
 			{
-				force_remove_network_entity(ptr, true);
+				force_remove_network_entity(ptr);
 				return;
 			}
 		}
@@ -379,15 +379,15 @@ namespace big::entity
 		return closest_entity;
 	}
 
-	void force_remove_network_entity(rage::CDynamicEntity* entity, bool delete_locally)
+	void force_remove_network_entity(rage::CDynamicEntity* entity, player_ptr for_player, bool delete_locally)
 	{
 		if (!entity->m_net_object)
 			return;
 
-		force_remove_network_entity(entity->m_net_object->m_object_id, entity->m_net_object->m_ownership_token, delete_locally);
+		force_remove_network_entity(entity->m_net_object->m_object_id, entity->m_net_object->m_ownership_token, for_player, delete_locally);
 	}
 
-	void force_remove_network_entity(std::uint16_t net_id, int ownership_token, bool delete_locally)
+	void force_remove_network_entity(std::uint16_t net_id, int ownership_token, player_ptr for_player, bool delete_locally)
 	{
 		char buf[0x200]{};
 		rage::datBitBuffer remove_buf(buf, sizeof(buf));
@@ -417,13 +417,20 @@ namespace big::entity
 		pack.write<int>(remove_buf.GetPosition(), 13);
 		pack.m_buffer.WriteArray(&buf, remove_buf.GetPosition());
 
-		for (auto& player : g_player_service->players())
+		if (for_player)
 		{
-			if (player.second->get_net_game_player())
+			pack.send(for_player->get_net_game_player()->m_msg_id);
+		}
+		else
+		{
+			for (auto& player : g_player_service->players())
 			{
-				if (!player.second->get_ped() || player.second->get_ped()->m_net_object->m_object_id != net_id) // would crash the player otherwise
+				if (player.second->get_net_game_player())
 				{
-					pack.send(player.second->get_net_game_player()->m_msg_id);
+					if (!player.second->get_ped() || player.second->get_ped()->m_net_object->m_object_id != net_id) // would crash the player otherwise
+					{
+						pack.send(player.second->get_net_game_player()->m_msg_id);
+					}
 				}
 			}
 		}
@@ -431,28 +438,5 @@ namespace big::entity
 		if (delete_locally)
 			if (auto object = (*g_pointers->m_gta.m_network_object_mgr)->find_object_by_id(net_id, true))
 				(*g_pointers->m_gta.m_network_object_mgr)->UnregisterNetworkObject(object, 8, true, true);
-	}
-
-	void force_remove_network_entity(rage::CDynamicEntity* entity, player_ptr for_player)
-	{
-		auto net_obj = entity->m_net_object;
-
-		if (!net_obj)
-			return;
-
-		char buf[0x200]{};
-		rage::datBitBuffer remove_buf(buf, sizeof(buf));
-
-		remove_buf.Write<std::uint16_t>(net_obj->m_object_id, 13);
-		remove_buf.Write<uint32_t>(get_next_token_value(net_obj->m_ownership_token), 5);
-
-		packet pack;
-		pack.write_message(rage::eNetMessage::MsgPackedReliables);
-		pack.write<int>(4, 4); // remove
-		pack.write<int>(1, 5); // msgs_written
-		pack.write<int>(remove_buf.GetPosition(), 13);
-		pack.m_buffer.WriteArray(&buf, remove_buf.GetPosition());
-
-		pack.send(for_player->get_net_game_player()->m_msg_id);
 	}
 }

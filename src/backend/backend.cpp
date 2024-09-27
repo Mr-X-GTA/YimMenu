@@ -21,20 +21,6 @@ namespace big
 {
 	void bypass_battleye()
 	{
-		for (const auto& plyr : g_player_service->players() | std::ranges::views::values)
-		{
-			if (!plyr->is_host() || plyr->block_outgoing_clone_create)
-				continue;
-
-			if (auto ped = g_player_service->get_self()->get_ped())
-			{
-				entity::force_remove_network_entity(ped, plyr);
-			}
-
-			plyr->block_outgoing_clone_create = true;
-			break;
-		}
-
 		constexpr std::array<std::uint32_t, 16> valid_hashes = {1410389794, 967, 1523678325, 472, 0, 0, 1323039495, 0, 0, 1731098795, 2256610353, 17956, 414639110, 307143837, 3443181821, 0};
 
 		if (auto hashes = *g_pointers->m_gta.m_game_data_hash)

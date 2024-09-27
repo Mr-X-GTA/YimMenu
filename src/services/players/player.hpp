@@ -96,7 +96,7 @@ namespace big
 		bool log_clones         = false;
 		bool log_network_events = false;
 
-		bool block_outgoing_clone_create = false;
+		bool bad_host = false;
 
 		bool trigger_desync_kick = false;
 		bool trigger_end_session_kick = false;
