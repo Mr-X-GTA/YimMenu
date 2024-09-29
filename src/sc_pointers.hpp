@@ -11,6 +11,7 @@ namespace big
 		functions::update_presence_attribute_string m_update_presence_attribute_string;
 
 		functions::start_get_presence_attributes m_start_get_presence_attributes;
+		PVOID m_num_handles_patch;
 		PVOID m_read_attribute_patch;
 		PVOID m_read_attribute_patch_2;
 	};

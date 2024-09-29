@@ -2029,6 +2029,15 @@ namespace big
                 g_pointers->m_sc.m_start_get_presence_attributes = ptr.as<functions::start_get_presence_attributes>();
             }
         },
+        // SGPA Num Handles Patch
+        {
+            "NHP",
+            "83 FD 20 0F 87 54 02 00 00",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_sc.m_num_handles_patch = ptr.add(2).as<PVOID>();
+            }
+        },
         // Read Attribute Patch
         {
             "RAP",
