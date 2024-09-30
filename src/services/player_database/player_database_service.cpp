@@ -345,7 +345,7 @@ namespace big
 
 	void player_database_service::update_player_states(bool tracked_only)
 	{
-		constexpr auto bucket_size = 32;
+		constexpr auto bucket_size = 100;
 
 		std::vector<std::vector<rage::rlScHandle>> gamer_handle_buckets{};
 
