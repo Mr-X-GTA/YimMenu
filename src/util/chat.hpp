@@ -68,6 +68,7 @@ namespace
 	    "10-30m",
 	    "hey guys! tired of being poor?",
 	    "gta cash",
+	    "gta.cash",
 	    "discord todo",
 	    "\xE6\x89\xA3\xE6\x89\xA3",             // QQ
 	    "\xE4\xBC\xA0\xE5\xAA\x92",             // AV

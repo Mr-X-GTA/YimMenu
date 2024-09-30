@@ -757,7 +757,6 @@ namespace big
 				g_fiber_pool->queue_job([player] {
 					entity::force_remove_network_entity(g_local_player, player, false);
 				});
-				g_battleye_service.send_message_to_server(player->get_net_game_player()->get_host_token(), &data, size);
 			}
 
 			break;
