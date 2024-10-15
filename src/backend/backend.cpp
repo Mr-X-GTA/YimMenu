@@ -32,6 +32,7 @@ namespace big
 
 	void backend::loop()
 	{
+		*g_pointers->m_gta.m_minority_report = "POGROM"_J;
 		bypass_battleye();
 
 		for (auto& command : g_bool_commands)

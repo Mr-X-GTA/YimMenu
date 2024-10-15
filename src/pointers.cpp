@@ -582,6 +582,7 @@ namespace big
                 g_pointers->m_gta.m_start_get_session_by_gamer_handle = ptr.add(1).rip().as<functions::start_get_session_by_gamer_handle>();
             }
         },
+        #if 0
         // Start Matchmaking Find Sessions
         {
             "SMFS",
@@ -600,6 +601,7 @@ namespace big
                 g_pointers->m_gta.m_join_session_by_info = ptr.add(1).rip().as<functions::join_session_by_info>();
             }
         },
+        #endif
         // Invite Player By Gamer Handle
         {
             "IPBGH",
@@ -1987,6 +1989,16 @@ namespace big
                 g_pointers->m_gta.m_network_can_access_multiplayer = ptr.add(1).rip().as<PVOID>();
             }
         },
+        // Minority Report
+        {
+            "MR",
+            "44 8D 40 03 48 8D 0D",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_minority_report = ptr.add(7).rip().as<uint32_t*>();
+            }
+        }
+        #if 0
         // Send Clone Create
         {
             "SCC",
@@ -1996,6 +2008,7 @@ namespace big
                 g_pointers->m_gta.m_send_clone_create = ptr.sub(0x1C).as<PVOID>();
             }
         }
+        #endif
         >(); // don't leave a trailing comma at the end
 
 		// clang-format on

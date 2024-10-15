@@ -126,6 +126,7 @@ namespace big
 			LOG(INFO) << "METRIC: " << metric_name << "; DATA: " << yim_serializer.get_string();
 		}
 
+		return true; //
 		if (g.debug.block_all_metrics) [[unlikely]]
 			return true;
 		else

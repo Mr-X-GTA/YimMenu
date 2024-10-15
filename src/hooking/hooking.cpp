@@ -83,7 +83,9 @@ namespace big
 		detour_hook_helper::add<hooks::serialize_join_request_message>("SJRM", g_pointers->m_gta.m_serialize_join_request_message);
 		detour_hook_helper::add<hooks::serialize_join_request_message_2>("SJRM2", g_pointers->m_gta.m_serialize_join_request_message_2);
 
+		#if 0
 		detour_hook_helper::add<hooks::start_matchmaking_find_sessions>("SMFS", g_pointers->m_gta.m_start_matchmaking_find_sessions);
+		#endif
 
 		detour_hook_helper::add<hooks::broadcast_net_array>("BNA", g_pointers->m_gta.m_broadcast_net_array);
 
@@ -156,9 +158,11 @@ namespace big
 
 		detour_hook_helper::add<hooks::create_pool_item>("CPI", g_pointers->m_gta.m_create_pool_item);
 
+		#if 0
 		detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);
 
 		detour_hook_helper::add<hooks::send_clone_create>("SCC", g_pointers->m_gta.m_send_clone_create);
+		#endif
 
 		g_hooking = this;
 	}
