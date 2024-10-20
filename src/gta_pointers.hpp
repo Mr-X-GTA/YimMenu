@@ -166,10 +166,8 @@ namespace big
 
 		functions::get_gamer_online_state m_get_gamer_online_state;
 		functions::start_get_session_by_gamer_handle m_start_get_session_by_gamer_handle;
-		#if 0
 		functions::start_matchmaking_find_sessions m_start_matchmaking_find_sessions;
 		functions::join_session_by_info m_join_session_by_info;
-		#endif
 
 		functions::invite_player_by_gamer_handle m_invite_player_by_gamer_handle;
 		functions::add_friend_by_gamer_handle m_add_friend_by_gamer_handle;
@@ -423,10 +421,6 @@ namespace big
 		PVOID m_network_can_access_multiplayer;
 
 		uint32_t* m_minority_report;
-
-		#if 0
-		PVOID m_send_clone_create;
-		#endif
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

@@ -2,11 +2,11 @@
 
 namespace big
 {
-	bool hooks::network_can_access_multiplayer(void* a1, int* error)
+	uint32_t hooks::network_can_access_multiplayer(uint32_t a1, uint64_t* a2)
 	{
-		if (error)
-			*error = 0;
+		if (a2)
+			*a2 = 0;
 
-		return true;
+		return 0;
 	}
 }

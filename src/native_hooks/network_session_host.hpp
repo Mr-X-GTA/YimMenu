@@ -11,9 +11,7 @@ namespace big
 		{
 			if (g.session.join_queued)
 			{
-				#if 0
 				g_pointers->m_gta.m_join_session_by_info(*g_pointers->m_gta.m_network, &g.session.info, g.session.join_in_sctv_slots ? 1 : 0, 1 | 2, nullptr, 0);
-				#endif
 				g.session.join_queued = false;
 				src->set_return_value<BOOL>(TRUE);
 			}

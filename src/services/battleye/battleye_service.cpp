@@ -69,7 +69,9 @@ namespace big
 		}
 	};
 
+	#if 0
 	battleye_server g_battleye_server("battleyeserver", "BATTLEYE_SERVER", "BATTLEYE_SERVER_DESC", g.debug.battleye_server);
+	#endif
 
 	bool battleye_service::is_running()
 	{

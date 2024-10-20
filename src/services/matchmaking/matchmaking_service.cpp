@@ -44,6 +44,8 @@ namespace big
 
 	bool matchmaking_service::matchmake(std::optional<int> constraint, std::optional<bool> enforce_player_limit)
 	{
+		return false; // TODO
+
 		for (auto& session : m_found_sessions)
 		{
 			session.is_valid = true;
