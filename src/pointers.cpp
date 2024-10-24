@@ -1988,15 +1988,6 @@ namespace big
             {
                 g_pointers->m_gta.m_network_can_access_multiplayer = ptr.add(10).rip().as<PVOID>();
             }
-        },
-        // Minority Report
-        {
-            "MR",
-            "44 8D 40 03 48 8D 0D",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_minority_report = ptr.add(7).rip().as<uint32_t*>();
-            }
         }
         >(); // don't leave a trailing comma at the end
 
