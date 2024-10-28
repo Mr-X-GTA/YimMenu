@@ -66,7 +66,7 @@ target_precompile_headers(YimMenu PRIVATE "${SRC_DIR}/common.hpp")
 target_link_libraries(YimMenu PRIVATE pugixml minhook AsyncLogger dbghelp imgui cpr lua_static asmjit::asmjit)
 
 # Warnings as errors
-set_property(TARGET YimMenu PROPERTY COMPILE_WARNING_AS_ERROR ON)
+set_property(TARGET YimMenu PROPERTY COMPILE_WARNING_AS_ERROR OFF)
 
 add_compile_definitions(YimMenu 
     "_CRT_SECURE_NO_WARNINGS"

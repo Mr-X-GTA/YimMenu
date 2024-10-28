@@ -23,26 +23,46 @@ namespace big
 		return true;
 	}
 
-	static bool bLastKickHost = false;
+	static bool bLastKickHost   = false;
+	static int lastKickedHostID = -1; // Letzter gekickter Host
 	void looped::session_auto_kick_host()
 	{
-		#if 0
-		bool kick_host = *g_pointers->m_gta.m_is_session_started && g.session.spoof_host_token_type != 0 && g.session.kick_host_when_forcing_host;
-		if (kick_host && !bLastKickHost && is_next_in_queue()) [[unlikely]]
+		// Aktivität der Sitzung überprüfen
+		if (!*g_pointers->m_gta.m_is_session_started)
 		{
-			g_player_service->iterate([](auto& plyr) {
-				// Don't kick trusted players
-				if (plyr.second->is_trusted || (g.session.trust_friends && plyr.second->is_friend()) 
-					|| (plyr.second->is_modder && g.session.exclude_modders_from_kick_host))
-						return;
+			return;
+		}
 
-				if (plyr.second->is_host())
+		// Lokalen Spieler und aktuellen Host abrufen
+		int localPlayerID = PLAYER::PLAYER_ID();
+		int hostPlayerID  = NETWORK::NETWORK_GET_HOST_PLAYER_INDEX();
+
+		// Bedingung: Kick aktivieren, wenn ein Host gesetzt ist und er nicht der letzte gekickte Host war
+		if (hostPlayerID != -1 && hostPlayerID != localPlayerID && hostPlayerID != lastKickedHostID)
+		{
+			g_player_service->iterate([&](auto& player) {
+				// Bedingungen zum Überspringen bestimmter Spieler (Freunde, Modder, vertrauenswürdige Spieler)
+				if (player.second->is_trusted || (g.session.trust_friends && player.second->is_friend())
+				    || (player.second->is_modder && g.session.exclude_modders_from_kick_host))
 				{
-					player_command::get("smartkick"_J)->call(plyr.second, {});
+					return; // Spieler überspringen
+				}
+
+				// Prüfen, ob der Spieler der Host ist und ihn kicken
+				if (player.second->is_host()) // Wenn der Spieler-Host geprüft wird
+				{
+					player_command::get("smartkick"_J)->call(player.second, {});
+
+					// Letzten gekickten Host speichern und Status aktualisieren
+					lastKickedHostID = hostPlayerID;
+					bLastKickHost    = true;
 				}
 			});
 		}
-		bLastKickHost = kick_host;
-		#endif
+		else
+		{
+			// Wenn die Bedingung für den Kick nicht erfüllt ist, zurücksetzen
+			bLastKickHost = false;
+		}
 	}
 }
