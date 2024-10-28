@@ -23,26 +23,40 @@ namespace big
 		return true;
 	}
 
+	static int lastKickedHostID = -1;
 	static bool bLastKickHost = false;
 	void looped::session_auto_kick_host()
 	{
-		#if 0
-		bool kick_host = *g_pointers->m_gta.m_is_session_started && g.session.spoof_host_token_type != 0 && g.session.kick_host_when_forcing_host;
-		if (kick_host && !bLastKickHost && is_next_in_queue()) [[unlikely]]
+		if (!*g_pointers->m_gta.m_is_session_started)
 		{
-			g_player_service->iterate([](auto& plyr) {
-				// Don't kick trusted players
-				if (plyr.second->is_trusted || (g.session.trust_friends && plyr.second->is_friend()) 
-					|| (plyr.second->is_modder && g.session.exclude_modders_from_kick_host))
-						return;
+			return;
+		}
 
-				if (plyr.second->is_host())
+		const auto localPlayerID = PLAYER::PLAYER_ID();
+		int hostPlayerID         = NETWORK::NETWORK_GET_HOST_PLAYER_INDEX();
+
+		if (hostPlayerID != -1 && hostPlayerID != localPlayerID && hostPlayerID != lastKickedHostID)
+		{
+			g_player_service->iterate([&](auto& player) {
+				if (player.second->is_trusted || (g.session.trust_friends && player.second->is_friend()) || (g.session.exclude_modders_from_kick_host))
 				{
-					player_command::get("smartkick"_J)->call(plyr.second, {});
+					return;
+				}
+
+
+				if (player.second->is_host())
+				{
+					player_command::get("smartkick"_J)->call(player.second, {});
+
+					lastKickedHostID = hostPlayerID;
+					bLastKickHost    = true;
 				}
 			});
 		}
-		bLastKickHost = kick_host;
-		#endif
+		else
+		{
+			bLastKickHost = false;
+		}
 	}
+	
 }
