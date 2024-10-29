@@ -745,6 +745,11 @@ namespace big
 			bool client = buffer.Read<bool>(1);
 			buffer.SeekForward(4); // normalize before we read
 
+			if (size > 1028 || player && player->is_host() == client)
+			{
+				return true;
+			}
+
 			buffer.ReadArray(&data, size * 8);
 
 			if (client && player)
@@ -753,15 +758,12 @@ namespace big
 			}
 			else if (player)
 			{
-				g_battleye_service.send_message_to_server(player->get_net_game_player()->get_host_token(), &data, size);
+				g_battleye_service.on_receive_message_from_server(player->get_net_game_player()->get_host_token(), &data, size);
 			}
 
 			if (player && !player->bad_host && player->is_host())
 			{
 				player->bad_host = true;
-				g_fiber_pool->queue_job([player] {
-					entity::force_remove_network_entity(g_local_player, player, false);
-				});
 			}
 
 			break;

@@ -174,20 +174,9 @@ namespace big
 
 		ImGui::EndDisabled();
 
-		if (g.session.spoof_host_token_type != 0)
-		{
-			ImGui::BeginDisabled();
-			ImGui::Checkbox("KICK_HOST_ON_JOIN"_T.data(), &g.session.kick_host_when_forcing_host);
-			ImGui::EndDisabled();
-
-			if (g.session.kick_host_when_forcing_host)
-			{
-				ImGui::SameLine();
-				ImGui::Checkbox("EXCLUDE_MODDERS_FROM_KICK_HOST"_T.data(), &g.session.exclude_modders_from_kick_host);
-				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("EXCLUDE_MODDERS_FROM_KICK_HOST_DESC"_T.data());
-			}
-		}
+		ImGui::Checkbox("Auto Kick Host", &g.session.kick_host_when_forcing_host);
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("Kicks the host every few minutes until you become host to avoid being kicked");
 
 		ImGui::Checkbox("FORCE_SCRIPT_HOST"_T.data(), &g.session.force_script_host);
 		if (ImGui::IsItemHovered())

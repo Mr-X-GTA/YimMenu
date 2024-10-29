@@ -672,9 +672,15 @@ namespace big
 		{
 			auto p1 = buffer->Read<int>(32);
 			auto p2 = buffer->Read<int>(32);
+
 			LOGF(stream::net_events, VERBOSE, "Received REPORT_MYSELF_EVENT from {} with parameters ({}, {})", plyr->get_name(), p1, p2);
-			session::add_infraction(plyr, Infraction::TRIGGERED_ANTICHEAT);
-			g.reactions.game_anti_cheat_modder_detection.process(plyr);
+
+			if (p1 != 6) // false positives when telemetry endpoint is unreachable
+			{
+				session::add_infraction(plyr, Infraction::TRIGGERED_ANTICHEAT);
+				g.reactions.game_anti_cheat_modder_detection.process(plyr);
+			}
+
 			buffer->Seek(0);
 			break;
 		}
