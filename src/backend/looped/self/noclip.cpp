@@ -47,7 +47,7 @@ namespace big
 			if (can_update_location())
 			{
 				// Left Shift
-				if (PAD::IS_DISABLED_CONTROL_PRESSED(0, (int)ControllerInputs::INPUT_SPRINT))
+				if (PAD::IS_DISABLED_CONTROL_PRESSED(0, (int)ControllerInputs::INPUT_JUMP))
 					vel.z += speed / 2;
 				// Left Control
 				if (PAD::IS_DISABLED_CONTROL_PRESSED(0, (int)ControllerInputs::INPUT_DUCK))
