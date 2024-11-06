@@ -39,6 +39,15 @@ namespace big
 
 		using init_t = bool (*)(int api_level, CUserData* data, CApi* api);
 
+		enum packet_id : std::uint8_t
+		{
+			INIT      = 0x00,
+			START     = 0x02,
+			REQUEST   = 0x04,
+			RESPONSE  = 0x05,
+			HEARTBEAT = 0x09,
+		};
+
 		std::mutex m_mutex{};
 
 		bool is_running();
@@ -51,6 +60,7 @@ namespace big
 		void add_player(std::uint64_t token, std::uint64_t rockstar_id, const char* name);
 		void remove_player(std::uint64_t token);
 		void receive_message(std::uint64_t token, void* message, int size);
+		void on_receive_message_from_server(std::uint64_t token, void* message, int size);
 		void send_message_to_client(std::uint64_t token, void* message, int size);
 		void send_message_to_server(std::uint64_t token, void* message, int size);
 		void kick_player(std::uint64_t token, const char* reason);
