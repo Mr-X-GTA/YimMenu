@@ -4,14 +4,14 @@
 
 namespace big::scr_globals
 {
-	static inline const script_global gsbd(2648938);
-	static inline const script_global gsbd_kicking(1877252);
-	static inline const script_global gsbd_fm_events(1916617);
+	static inline const script_global gsbd(2648914); // , "GSBD"
+	static inline const script_global gsbd_kicking(1877384); // , "GSBD_Kicking"
+	static inline const script_global gsbd_fm_events(1916957); // "BUSINESS_BATTLES", -1, false, 0) && !
 
-	static inline const script_global globalplayer_bd(2657971);
-	static inline const script_global gpbd_fm_3(1887305);
-	static inline const script_global gpbd_fm_1(1845281);
-	static inline const script_global interiors(1943520);
+	static inline const script_global globalplayer_bd(2657991); // , "AM_MP_SMPL_INTERIOR_INT", NOTE: true function has a while loop (var < 32)
+	static inline const script_global gpbd_fm_3(1887549); // ("EXEC1_Exit_Office_In_Heli_Scene")
+	static inline const script_global gpbd_fm_1(1845221); // ), "APAIR", "APAIR_CONT", NOTE: a function above
+	static inline const script_global interiors(1943917); // return "BAOF_P_KICK_A";
 
 	static inline const script_global launcher_global(2699172);
 
@@ -24,19 +24,19 @@ namespace big::scr_globals
 	static inline const script_global transition_state(1575011);
 	static inline const script_global sctv_spectator(2697732); // pausemenu_multiplayer function 0xE49C42EC
 
-	static inline const script_global vehicle_global(1586521);
+	static inline const script_global vehicle_global(1586535); //("DLC_CHRISTMAS2017/XM_FACILITY_ENTRY_EXIT"); NOTE: a function above
 
-	static inline const script_global freemode_properties(2672855);
+	static inline const script_global freemode_properties(2672939); //"GAN_ETFE_VEHIN"
 	static inline const script_global freemode_global(2738935);
 	
-	static inline const script_global spawn_global(2696212);
+	static inline const script_global spawn_global(2696456);
 
 	static inline const script_global transaction_overlimit(4537455);
 
 	static inline const script_global stats(2359296);
 
 	static inline const script_global session(1574589);
-	static inline const script_global session2(1575035);
+	static inline const script_global session2(1575036);
 	static inline const script_global session3(32949);
 	static inline const script_global session4(1574942);
 	static inline const script_global session5(1575010);
