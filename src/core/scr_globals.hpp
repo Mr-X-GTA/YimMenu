@@ -31,16 +31,16 @@ namespace big::scr_globals
 	
 	static inline const script_global spawn_global(2696456);
 
-	static inline const script_global transaction_overlimit(4537455);
+	static inline const script_global transaction_overlimit(4538089);
 
 	static inline const script_global stats(2359296);
 
 	static inline const script_global session(1574589);
-	static inline const script_global session2(1575036);
-	static inline const script_global session3(32949);
+	static inline const script_global session2(1575037);
+	static inline const script_global session3(33088);
 	static inline const script_global session4(1574942);
 	static inline const script_global session5(1575010);
-	static inline const script_global session6(2696130); // freemode -> if (NETWORK::NETWORK_IS_GAME_IN_PROGRESS() && !NETWORK::NETWORK_IS_ACTIVITY_SESSION())
+	static inline const script_global session6(2696374); // freemode -> if (NETWORK::NETWORK_IS_GAME_IN_PROGRESS() && !NETWORK::NETWORK_IS_ACTIVITY_SESSION())
 
 	static inline const script_global interaction_menu_access(2710430); // am_pi_menu -> if (NETWORK::NETWORK_IS_SIGNED_ONLINE()) first global after that
 
@@ -48,16 +48,16 @@ namespace big::scr_globals
 	
 	static inline const script_global passive(1574582); // if (((!PED::IS_PED_IN_ANY_VEHICLE(PLAYER::GET_PLAYER_PED(bVar1), false) || Global_
 
-	static inline const script_global property_garage(1937684);
-	static inline const script_global property_names(1312298);
+	static inline const script_global property_garage(1938043);
+	static inline const script_global property_names(1312333);
 
-	static inline const script_global reset_clothing(104077); // freemode 75, &iLocal_.*, 2\);
+	static inline const script_global reset_clothing(104243); // freemode 75, &iLocal_.*, 2\);
 
-	static inline const script_global gun_van(1949748); // return -29.532f, 6435.136f, 31.162f;
+	static inline const script_global gun_van(1950373); // return -29.532f, 6435.136f, 31.162f;
 
-	static inline const script_global disable_phone(20913);
+	static inline const script_global disable_phone(21049);
 
-	static inline const script_global should_reset_fm_weapons(1578026);
+	static inline const script_global should_reset_fm_weapons(1578039);
 }
 
 namespace big::scr_locals
