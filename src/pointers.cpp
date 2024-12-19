@@ -636,60 +636,6 @@ namespace big
                 g_pointers->m_gta.m_script_vm = ptr.add(1).rip().as<functions::script_vm>();
             }
         },
-        // Generate UUID
-        {
-            "GU",
-            "E8 ? ? ? ? 84 C0 74 0C 48 8B 44 24 ? 48 89 03",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_generate_uuid = ptr.add(1).rip().as<functions::generate_uuid>();
-            }
-        },
-        // Host Token
-        {
-            "HT",
-            "48 8B 05 ? ? ? ? 48 83 F8 FF",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_host_token = ptr.add(3).rip().as<uint64_t*>();
-            }
-        },
-        // Peer ID
-        {
-            "PI",
-            "48 83 F8 FF 74 0D",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_peer_id = ptr.add(9).rip().as<uint64_t*>();
-            }
-        },
-        // Profile Gamer Info
-        {
-            "PGI",
-            "48 8D 05 ? ? ? ? 48 8B FE",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_profile_gamer_info = ptr.add(3).rip().as<rage::rlGamerInfo*>();
-            }
-        },
-        // Player Info Gamer Info
-        {
-            "PIGI",
-            "E8 ? ? ? ? 48 8D 4B 20 48 8B D0 E8 ? ? ? ? 41 8A CF",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_player_info_gamer_info = ptr.add(1).rip().add(3).rip().as<rage::rlGamerInfo*>();
-            }
-        },
-        // Communications
-        {
-            "C",
-            "48 8B 1D ? ? ? ? 48 8D 4C 24 30",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_communications = ptr.add(3).rip().as<CCommunications**>();
-            }
-        },
         // Handle Join Request
         {
             "HJR",
@@ -1840,15 +1786,6 @@ namespace big
             {
                 g_pointers->m_gta.m_dlc_manager = ptr.sub(0x11).rip().as<void**>();
                 g_pointers->m_gta.m_get_dlc_hash = ptr.sub(0xA).rip().as<PVOID>();
-            }
-        },
-        // Add Gamer To Session
-        {
-            "AGTS",
-            "7C E8 EB 23",
-            [](memory::handle ptr)
-            {
-                g_pointers->m_gta.m_add_gamer_to_session = ptr.add(0x23).rip().as<PVOID>();
             }
         },
         // Set Head Blend Data

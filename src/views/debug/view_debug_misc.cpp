@@ -18,7 +18,6 @@ namespace big
 	{
 		if (ImGui::BeginTabItem("DEBUG_TAB_MISC"_T.data()))
 		{
-			components::command_checkbox<"battleyeserver">();
 			components::command_checkbox<"external_console">();
 
 			components::command_checkbox<"windowhook">("VIEW_DEBUG_MISC_DISABLE_GTA_WINDOW_HOOK"_T);

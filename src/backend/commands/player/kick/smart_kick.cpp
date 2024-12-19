@@ -21,10 +21,7 @@ namespace big
 			{
 				if (player->is_host())
 				{
-					constexpr size_t arg_count = 16;
-					int64_t args[arg_count] = {(int64_t)eRemoteEvent::InteriorControl, (int64_t)self::id, 1 << player->id(), (int64_t)(int)-1};
-
-					g_pointers->m_gta.m_trigger_script_event(1, args, arg_count, 1 << player->id(), (int)eRemoteEvent::InteriorControl);
+					player_command::get("nfkick"_J)->call(player, {});
 				}
 				else
 				{

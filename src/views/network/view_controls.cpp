@@ -127,52 +127,8 @@ namespace big
 	{
 		ImGui::BeginGroup();
 		components::small_text("FORCE_HOST"_T);
-
-		static constexpr auto token_spoof_types = std::to_array({"SPOOF_HOST_TOKEN_OFF", "SPOOF_HOST_TOKEN_TYPE_LEGIT", "SPOOF_HOST_TOKEN_TYPE_AGGRESSIVE", "SPOOF_HOST_TOKEN_TYPE_EXTRA_AGGRESSIVE", "SPOOF_HOST_TOKEN_TYPE_CUSTOM"});
-
-		ImGui::BeginDisabled(gta_util::get_network()->m_game_session_state != 0);
-
-		ImGui::SetNextItemWidth(300);
-		if (ImGui::BeginCombo("HOST_TOKEN_SPOOFING"_T.data(),
-		        g_translation_service.get_translation(token_spoof_types[g.session.spoof_host_token_type]).data()))
-		{
-			for (int i = 0; i < token_spoof_types.size(); i++)
-			{
-				if (ImGui::Selectable(g_translation_service.get_translation(token_spoof_types[i]).data(), i == g.session.spoof_host_token_type))
-				{
-					g.session.spoof_host_token_type = i;
-					g_fiber_pool->queue_job([] {
-						g.session.spoof_host_token_dirty = true;
-					}); // this part gets a bit racy so we're setting it in a fiber pool
-				}
-
-				if (i == 0)
-					ImGui::EndDisabled();
-
-				if (i == g.session.spoof_host_token_type)
-				{
-					ImGui::SetItemDefaultFocus();
-				}
-			}
-
-			ImGui::EndCombo();
-		}
-
-		if (g.session.spoof_host_token_type != 0)
-		{
-			ImGui::Checkbox("HIDE_TOKEN_SPOOFING_WHEN_HOST"_T.data(), &g.session.hide_token_spoofing_when_host);
-		}
-
-		if (g.session.spoof_host_token_type == 4)
-		{
-			ImGui::SetNextItemWidth(200);
-			if (ImGui::InputScalar("##token_input", ImGuiDataType_U64, &g.session.custom_host_token, nullptr, nullptr, "%p", ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase))
-			{
-				g.session.spoof_host_token_dirty = true;
-			}
-		}
-
-		ImGui::EndDisabled();
+		
+		ImGui::Checkbox("KICK_HOST_TO_STAY_IN_SESSION"_T.data(), &g.session.kick_host_to_stay_in_session);
 
 		ImGui::Checkbox("FORCE_SCRIPT_HOST"_T.data(), &g.session.force_script_host);
 		if (ImGui::IsItemHovered())

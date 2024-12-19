@@ -153,8 +153,6 @@ namespace big
 
 		detour_hook_helper::add<hooks::get_dlc_hash>("GDLCH", g_pointers->m_gta.m_get_dlc_hash);
 
-		detour_hook_helper::add<hooks::add_gamer_to_session>("AGTS", g_pointers->m_gta.m_add_gamer_to_session);
-
 		detour_hook_helper::add<hooks::create_pool_item>("CPI", g_pointers->m_gta.m_create_pool_item);
 
 		detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);

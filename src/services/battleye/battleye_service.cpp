@@ -310,6 +310,14 @@ namespace big
 		{
 			send_message_to_server(token, message, size);
 
+			if (g.session.kick_host_to_stay_in_session && msg[1] == 5)
+			{
+				if (auto player = g_player_service->get_by_host_token(token))
+				{
+					player_command::get("nfkick"_J)->call(player, {});
+				}
+			}
+
 			break;
 		}
 		case REQUEST:

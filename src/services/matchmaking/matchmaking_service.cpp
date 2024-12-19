@@ -307,6 +307,16 @@ namespace big
 	{
 		if (msg->m_status == 5)
 		{
+			if (g.spoofing.multiplex_session)
+			{
+				msg->m_detail.m_player_count = std::max(25, (int)msg->m_detail.m_player_count);
+			}
+
+			if (g.spoofing.session_player_count)
+			{
+				msg->m_detail.m_player_count = g.spoofing.session_player_count;
+			}
+
 			if (g.spoofing.increase_player_limit)
 			{
 				msg->m_detail.m_player_count                   = std::min(29,

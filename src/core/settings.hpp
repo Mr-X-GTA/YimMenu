@@ -419,9 +419,6 @@ namespace big
 			bool log_text_messages                 = false;
 			bool decloak_players                   = false;
 			bool unhide_players_from_player_list   = true;
-			int spoof_host_token_type              = 0;
-			std::uint64_t custom_host_token        = 0x000000200235F2EA;
-			bool hide_token_spoofing_when_host     = true;
 			bool force_script_host                 = false;
 			bool player_magnet_enabled             = false;
 			int player_magnet_count                = 32;
@@ -441,8 +438,7 @@ namespace big
 			bool chat_commands                                   = false;
 			CommandAccessLevel chat_command_default_access_level = CommandAccessLevel::FRIENDLY;
 
-			bool kick_host_when_forcing_host = false;
-			bool exclude_modders_from_kick_host = false;
+			bool kick_host_to_stay_in_session = true;
 
 			bool explosion_karma = false;
 			bool damage_karma    = false;
@@ -464,8 +460,6 @@ namespace big
 			script_block_opts script_block_opts;
 
 			// not to be saved
-			std::atomic_bool spoof_host_token_dirty = true;
-			std::uint64_t original_host_token = 0;
 			bool join_queued = false;
 			rage::rlSessionInfo info;
 			bool never_wanted_all = false;
@@ -492,7 +486,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(chat_translator, enabled, print_result, draw_result, bypass_same_language, target_language, endpoint);
 			} chat_translator{};
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(session, log_chat_messages, log_text_messages, decloak_players, spoof_host_token_type, custom_host_token, hide_token_spoofing_when_host, force_script_host, player_magnet_enabled, player_magnet_count, is_team, join_in_sctv_slots, kick_host_when_forcing_host, exclude_modders_from_kick_host, explosion_karma, damage_karma, disable_traffic, disable_peds, force_thunder, block_ceo_money, randomize_ceo_colors, block_jobs, block_muggers, block_ceo_raids, block_ceo_creation, send_to_apartment_idx, send_to_warehouse_idx, chat_commands, chat_command_default_access_level, anonymous_bounty, lock_session, fast_join, unhide_players_from_player_list, allow_friends_into_locked_session, trust_friends, use_spam_timer, spam_timer, spam_length, chat_translator, script_block_opts)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(session, log_chat_messages, log_text_messages, decloak_players, force_script_host, player_magnet_enabled, player_magnet_count, is_team, join_in_sctv_slots, kick_host_to_stay_in_session, explosion_karma, damage_karma, disable_traffic, disable_peds, force_thunder, block_ceo_money, randomize_ceo_colors, block_jobs, block_muggers, block_ceo_raids, block_ceo_creation, send_to_apartment_idx, send_to_warehouse_idx, chat_commands, chat_command_default_access_level, anonymous_bounty, lock_session, fast_join, unhide_players_from_player_list, allow_friends_into_locked_session, trust_friends, use_spam_timer, spam_timer, spam_length, chat_translator, script_block_opts)
 		} session{};
 
 		struct settings

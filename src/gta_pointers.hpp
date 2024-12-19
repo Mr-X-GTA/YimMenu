@@ -192,13 +192,6 @@ namespace big
 		PVOID m_init_native_tables;
 		functions::script_vm m_script_vm;
 
-		functions::generate_uuid m_generate_uuid;
-		uint64_t* m_host_token;
-		uint64_t* m_peer_id;
-		rage::rlGamerInfo* m_profile_gamer_info;     // per profile gamer info
-		rage::rlGamerInfo* m_player_info_gamer_info; // the gamer info that is applied to CPlayerInfo
-		CCommunications** m_communications;
-
 		PVOID m_handle_join_request;
 		functions::write_join_response_data m_write_join_response_data;
 
@@ -387,8 +380,6 @@ namespace big
 
 		void** m_dlc_manager;
 		PVOID m_get_dlc_hash;
-
-		PVOID m_add_gamer_to_session;
 
 		functions::set_head_blend_data m_set_head_blend_data;
 
