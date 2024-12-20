@@ -312,7 +312,7 @@ namespace big
 				msg->m_detail.m_player_count = std::max(25, (int)msg->m_detail.m_player_count);
 			}
 
-			if (g.spoofing.session_player_count)
+			if (g.spoofing.spoof_session_player_count)
 			{
 				msg->m_detail.m_player_count = g.spoofing.session_player_count;
 			}
