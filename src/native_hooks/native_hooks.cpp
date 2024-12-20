@@ -144,22 +144,28 @@ namespace big
 		add_native_detour("tuneables_processing"_J, NativeIndex::_NETWORK_GET_TUNABLES_REGISTRATION_FLOAT, tunables::_NETWORK_GET_TUNABLES_REGISTRATION_FLOAT);
 
 		// TODO: is this safe?
+		add_native_detour("am_mp_hacker_den"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("am_mp_yacht"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("arena_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("armory_aircraft_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("base_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("business_hub_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
-		add_native_detour("car_meet_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("carmod_shop"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("car_meet_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("clothes_shop_mp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("clothes_shop_sp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("fixer_hq_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("gunclub_shop"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("hacker_den_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("hacker_truck_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("hairdo_shop_mp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("hairdo_shop_sp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("hangar_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("juggalo_hideout_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("personal_carmod_shop"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
-		add_native_detour("tuner_property_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
-		add_native_detour("clothes_shop_mp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
-		add_native_detour("gunclub_shop"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
-		add_native_detour("hairdo_shop_mp"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 		add_native_detour("tattoo_shop"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("tuner_property_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
+		add_native_detour("vinewood_premium_garage_carmod"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.
 
 		for (auto& entry : *g_pointers->m_gta.m_script_program_table)
 			if (entry.m_program)
