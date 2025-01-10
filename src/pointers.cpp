@@ -1914,6 +1914,17 @@ namespace big
             {
                 g_pointers->m_gta.m_be_network_bail_patch = ptr.add(17).rip().add(1).rip().as<PVOID>();
             }
+        },
+        // Add Skeleton Extension
+        {
+            "ASE",
+            "E8 ? ? ? ? 48 89 44 24 ? 48 85 C0 0F 84 ? ? ? ? 0F 28 05",
+            [](memory::handle ptr)
+            {
+                ptr = ptr.rip();
+                g_pointers->m_gta.m_add_skeleton_extension = ptr.as<PVOID>();
+                g_pointers->m_gta.m_skeleton_extension_count = ptr.add(0x2C).rip().as<int*>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

@@ -408,6 +408,9 @@ namespace big
 		PVOID m_network_can_access_multiplayer;
 
 		PVOID m_be_network_bail_patch;
+
+		PVOID m_add_skeleton_extension;
+		int* m_skeleton_extension_count;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

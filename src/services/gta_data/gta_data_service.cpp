@@ -429,6 +429,9 @@ namespace big
 						const auto name = item.child("Name").text().as_string();
 						const auto hash = rage::joaat(name);
 
+						if (hash == "WEAPON_STRICKLER"_J) // Gen9 exclusive
+							continue;
+
 						if (hash == "WEAPON_BIRD_CRAP"_J)
 							continue;
 

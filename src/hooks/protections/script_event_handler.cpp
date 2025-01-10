@@ -440,7 +440,7 @@ namespace big
 		}
 		case eRemoteEvent::StartScriptBegin:
 		{
-			auto script_id = args[3];
+			int script_id = args[3];
 
 			if (!protection::should_allow_script_launch(script_id))
 			{

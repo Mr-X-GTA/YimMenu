@@ -157,6 +157,8 @@ namespace big
 
 		detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);
 
+		detour_hook_helper::add<hooks::add_skeleton_extension>("ASE", g_pointers->m_gta.m_add_skeleton_extension);
+
 		g_hooking = this;
 	}
 

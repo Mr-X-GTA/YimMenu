@@ -212,6 +212,8 @@ namespace big
 		static void* create_pool_item(GenericPool* pool);
 
 		static uint32_t network_can_access_multiplayer(uint32_t a1, uint64_t* a2);
+
+		static void* add_skeleton_extension(rage::fwEntity* entity);
 	};
 
 	class minhook_keepalive
