@@ -151,7 +151,7 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 			    g.init(g_file_manager.get_project_file("./settings.json"));
 			    g_log.initialize("YimMenu", g_file_manager.get_project_file("./cout.log"), g.debug.external_console);
 			    LOG(INFO) << "Settings Loaded and logger initialized.";
-
+			    LOG(INFO) << "Updated By Csyon.";
 			    LOG(INFO) << "Yim's Menu Initializing";
 			    LOGF(INFO, "Git Info\n\tBranch:\t{}\n\tHash:\t{}\n\tDate:\t{}", version::GIT_BRANCH, version::GIT_SHA1, version::GIT_DATE);
 
