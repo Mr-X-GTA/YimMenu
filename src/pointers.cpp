@@ -332,14 +332,14 @@ namespace big
             }
         },
         // Network Player Mgr Init
-        {
+       /* {
             "NPMI",
             "41 56 48 83 EC ? 48 8B F1 B9 ? ? ? ? 49 8B F9 41 8B E8 4C 8B F2 E8",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_network_player_mgr_init = ptr.sub(0x13).as<decltype(gta_pointers::m_network_player_mgr_init)>();
             }
-        },
+        },*/
         // Network Player Mgr Shutdown
         {
             "NPMS",
@@ -637,14 +637,14 @@ namespace big
             }
         },
         // Handle Join Request
-        {
+        /*{
             "HJR",
             "48 8B C4 48 89 58 08 4C 89 48 20 4C 89 40 18 48 89 50 10 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 A8",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_handle_join_request = ptr.as<PVOID>();
             }
-        },
+        },*/
         // Write Join Response Data
         {
             "WJRD",
@@ -691,14 +691,14 @@ namespace big
             }
         },
         // Serialize Join Request Message 2
-        {
+        /*{
             "SJRM2",
             "E8 ? ? ? ? 48 8D 8D 18 01 00 00 8A D8",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_serialize_join_request_message_2 = ptr.add(1).rip().as<PVOID>();
             }
-        },
+        },*/
         // Send Network Damage
         {
             "SND",
@@ -1898,14 +1898,14 @@ namespace big
             }
         },
         // Network Can Access Multiplayer
-        {
+        /*{
             "NCAM",
             "E9 36 01 00 00 33 D2 8B CB",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_network_can_access_multiplayer = ptr.add(10).rip().as<PVOID>();
             }
-        },
+        },*/
         // BattlEye Network Bail Patch
         {
             "BENBP",
