@@ -47,7 +47,7 @@ namespace big
 		detour_hook_helper::add<hooks::init_native_tables>("INT", g_pointers->m_gta.m_init_native_tables);
 		detour_hook_helper::add<hooks::script_vm>("SVM", g_pointers->m_gta.m_script_vm);
 
-		detour_hook_helper::add<hooks::network_player_mgr_init>("NPMI", g_pointers->m_gta.m_network_player_mgr_init);
+		//detour_hook_helper::add<hooks::network_player_mgr_init>("NPMI", g_pointers->m_gta.m_network_player_mgr_init);
 		detour_hook_helper::add<hooks::network_player_mgr_shutdown>("NPMS", g_pointers->m_gta.m_network_player_mgr_shutdown);
 
 		detour_hook_helper::add<hooks::received_event>("RE", g_pointers->m_gta.m_received_event);
@@ -71,7 +71,7 @@ namespace big
 		detour_hook_helper::add<hooks::update_presence_attribute_int>("UPAI", g_pointers->m_sc.m_update_presence_attribute_int);
 		detour_hook_helper::add<hooks::update_presence_attribute_string>("UPAS", g_pointers->m_sc.m_update_presence_attribute_string);
 
-		detour_hook_helper::add<hooks::handle_join_request>("HJR", g_pointers->m_gta.m_handle_join_request);
+		//detour_hook_helper::add<hooks::handle_join_request>("HJR", g_pointers->m_gta.m_handle_join_request);
 
 		detour_hook_helper::add<hooks::sort_session_details>("SSD", g_pointers->m_gta.m_sort_session_details);
 
@@ -80,7 +80,7 @@ namespace big
 		detour_hook_helper::add<hooks::process_matchmaking_find_response>("PMFR", g_pointers->m_gta.m_process_matchmaking_find_response);
 
 		detour_hook_helper::add<hooks::serialize_join_request_message>("SJRM", g_pointers->m_gta.m_serialize_join_request_message);
-		detour_hook_helper::add<hooks::serialize_join_request_message_2>("SJRM2", g_pointers->m_gta.m_serialize_join_request_message_2);
+	//	detour_hook_helper::add<hooks::serialize_join_request_message_2>("SJRM2", g_pointers->m_gta.m_serialize_join_request_message_2);
 
 		#if 0
 		detour_hook_helper::add<hooks::start_matchmaking_find_sessions>("SMFS", g_pointers->m_gta.m_start_matchmaking_find_sessions);
@@ -155,7 +155,7 @@ namespace big
 
 		detour_hook_helper::add<hooks::create_pool_item>("CPI", g_pointers->m_gta.m_create_pool_item);
 
-		detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);
+		//detour_hook_helper::add<hooks::network_can_access_multiplayer>("NCAM", g_pointers->m_gta.m_network_can_access_multiplayer);
 
 		detour_hook_helper::add<hooks::add_skeleton_extension>("ASE", g_pointers->m_gta.m_add_skeleton_extension);
 
