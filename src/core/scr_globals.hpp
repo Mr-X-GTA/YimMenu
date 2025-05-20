@@ -24,7 +24,7 @@ namespace big::scr_globals
 	static inline const script_global transition_state(1575012);
 	static inline const script_global sctv_spectator(2697978); // pausemenu_multiplayer function 0xE49C42EC
 
-	static inline const script_global vehicle_global(1586535);
+	static inline const script_global vehicle_global(1586536);
 
 	static inline const script_global freemode_properties(2672939);
 	static inline const script_global freemode_global(2739811);
