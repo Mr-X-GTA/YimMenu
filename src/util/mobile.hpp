@@ -31,7 +31,7 @@ namespace big::mobile
 	{
 		inline void request_ammo_drop()
 		{
-			*scr_globals::freemode_global.at(917).as<int*>() = 1;
+			*scr_globals::freemode_global.at(918).as<int*>() = 1;
 		}
 
 		inline void request_boat_pickup()
@@ -46,12 +46,12 @@ namespace big::mobile
 
 		inline void request_backup_helicopter()
 		{
-			*scr_globals::freemode_global.at(4523).as<int*>() = 1;
+			*scr_globals::freemode_global.at(4524).as<int*>() = 1;
 		}
 
 		inline void request_airstrike()
 		{
-			*scr_globals::freemode_global.at(4524).as<int*>() = 1;
+			*scr_globals::freemode_global.at(4525).as<int*>() = 1;
 		}
 	}
 
@@ -118,7 +118,7 @@ namespace big::mobile
 
 		inline void request_terrorbyte()
 		{
-			*scr_globals::freemode_global.at(969).as<int*>() = 1;
+			*scr_globals::freemode_global.at(970).as<int*>() = 1;
 		}
 
 		inline void request_acidlab()
@@ -226,4 +226,5 @@ namespace big::mobile
 		}
 	}
 }
+
 
