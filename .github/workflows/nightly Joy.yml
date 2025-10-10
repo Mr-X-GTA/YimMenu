@@ -1,0 +1,162 @@
+name: Nightly Joy Build
+
+on:
+  schedule:
+    # cronjob that triggers every day at 2PM UTC
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  check_recent_commit:
+    runs-on: ubuntu-latest
+    name: Check Recent Commit
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: should_run
+        name: Check if latest commit date is within the previous 24 hours
+        run: |
+          if [ -z "$(git rev-list --since="24 hours ago" --all)" ]; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
+  build_nightly:
+    runs-on: windows-latest
+    name: Build Nightly
+    needs: check_recent_commit
+    if: needs.check_recent_commit.outputs.should_run == 'true'
+    outputs:
+      full_sha: ${{ steps.var.outputs.full_sha }}
+      short_sha: ${{ steps.var.outputs.short_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Check CMake version
+        run: cmake --version
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Generate CMake project
+        run: cmake -D CMAKE_BUILD_TYPE=RelWithDebInfo -D OPTIMIZE=YES -S. -Bbuild -G Ninja
+
+      - name: Build 64bit release DLL
+        run: cmake --build ./build --config RelWithDebInfo --target YimMenu --
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary
+          path: |
+            build/YimMenu.dll
+            build/YimMenu.pdb
+
+      - name: Generate Build Info
+        id: var
+        run: |
+          echo "full_sha=$(git rev-parse HEAD)" >> $env:GITHUB_OUTPUT
+          echo "short_sha=$(git rev-parse --short HEAD)" >> $env:GITHUB_OUTPUT
+
+  recreate_release:
+    runs-on: ubuntu-latest
+    name: Recreate Release
+    needs: build_nightly
+    if: needs.check_recent_commit.outputs.should_run == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete Existing Release
+        id: delete_release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const tag = "nightly";
+      
+            // List all releases and find the release by tag
+            const releases = await github.rest.repos.listReleases({
+              owner: owner,
+              repo: repo,
+            });
+      
+            const release = releases.data.find(release => release.tag_name === tag);
+      
+            // Check if the release exists and delete it
+            if (release) {
+              await github.rest.repos.deleteRelease({
+                owner: owner,
+                repo: repo,
+                release_id: release.id,
+              });
+              console.log(`Deleted release with ID ${release.id}`);
+            } else {
+              console.log("No existing release to delete");
+            }
+      
+            // Delete the tag
+            try {
+              await github.rest.git.deleteRef({
+                owner: owner,
+                repo: repo,
+                ref: `tags/${tag}`,
+              });
+              console.log(`Deleted tag ${tag}`);
+            } catch (error) {
+              console.error(`Error deleting tag: ${error.message}`);
+            }
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: binary
+
+      - name: Echo build sha256
+        id: build_sha
+        run: |
+          sha256sum YimMenu.dll > sha256.checksum
+          echo "build_sha=$(cat sha256.checksum)" >> $GITHUB_OUTPUT
+          cat sha256.checksum
+
+      - name: Nightly Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Nightly [${{ needs.build_nightly.outputs.short_sha }}]
+          tag_name: nightly
+          body: |
+            **This release has been built by Github Actions**
+            [Link to build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            Build SHA256:
+            ```
+            ${{ steps.build_sha.outputs.build_sha }}
+            ```
+            To verify the build SHA256 during the action, click the build link, go-to "Create Release", open the Echo build sha256 step and read the sha256.
+
+            You can download the build artifacts, generate a SHA256 checksum and compare it with the below binary.
+            Build artifacts ARE NOT automatically the same as release assets since release assets can be modified afterwards.
+
+            These are nightly builds of YimMenu, they are provided for testing purposes only:
+            - Test if your build environment produces a broken YimMenu.dll
+            - Test if source code is out of date and no longer compatible with the current version of GTA V
+
+            If you wish to use this menu as-is you are on your own, no warranty is provided.
+
+            Full Commit Hash:
+            ```
+            ${{ needs.build_nightly.outputs.full_sha }}
+            ```
+          files: |
+            YimMenu.dll
