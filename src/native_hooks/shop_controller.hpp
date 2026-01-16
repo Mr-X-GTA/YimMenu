@@ -54,7 +54,7 @@ namespace big
 
 		void NET_GAMESERVER_GET_PRICE(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<int>(0);
 				return;
@@ -86,7 +86,7 @@ namespace big
 
 		void NET_GAMESERVER_CATALOG_ITEM_IS_VALID(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<BOOL>(TRUE);
 				return;
@@ -97,7 +97,7 @@ namespace big
 
 		void NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<BOOL>(TRUE);
 				return;
@@ -108,7 +108,7 @@ namespace big
 
 		void NET_GAMESERVER_CATALOG_IS_VALID(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<BOOL>(TRUE);
 				return;
@@ -125,7 +125,7 @@ namespace big
 			auto value = src->get_arg<int>(4);
 			auto flags = src->get_arg<int>(5);
 
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 				value = 0;
 
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
@@ -133,7 +133,7 @@ namespace big
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<BOOL>(FALSE);
 				return;
@@ -143,7 +143,7 @@ namespace big
 
 		void NET_GAMESERVER_IS_CATALOG_CURRENT(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				src->set_return_value<BOOL>(TRUE);
 				return;
@@ -153,7 +153,7 @@ namespace big
 
 		void NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(rage::scrNativeCallContext* src)
 		{
-			if (g.settings.self.free_shopping)
+			if (g.self.free_shopping)
 			{
 				auto state = src->get_arg<int*>(0);
 				if (state)
