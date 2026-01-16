@@ -182,7 +182,7 @@ namespace big
 			auto p8 = src->get_arg<Any>(8);
 			auto p9 = src->get_arg<BOOL>(9);
 
-			NETWORK::NETWORK_BUY_ITEM(amount, item, p2, p3, p4, item_name, p6, p7, p8, p9);
+			MONEY::NETWORK_BUY_ITEM(amount, item, p2, p3, p4, item_name, p6, p7, p8, p9);
 		}
 
 		void NETWORK_BUY_PROPERTY(rage::scrNativeCallContext* src)
@@ -195,7 +195,7 @@ namespace big
 			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<BOOL>(3);
 
-			NETWORK::NETWORK_BUY_PROPERTY(cost, propertyName, p2, p3);
+			MONEY::NETWORK_BUY_PROPERTY(cost, propertyName, p2, p3);
 		}
 
 		void NETWORK_DEDUCT_CASH(rage::scrNativeCallContext* src)
@@ -222,7 +222,7 @@ namespace big
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 
-			NETWORK::NETWORK_BUY_HEALTHCARE(cost, p1, p2);
+			MONEY::NETWORK_BUY_HEALTHCARE(cost, p1, p2);
 		}
 
 		void NETWORK_BUY_AIRSTRIKE(rage::scrNativeCallContext* src)
@@ -235,7 +235,7 @@ namespace big
 			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			NETWORK::NETWORK_BUY_AIRSTRIKE(cost, p1, p2, p3);
+			MONEY::NETWORK_BUY_AIRSTRIKE(cost, p1, p2, p3);
 		}
 
 		void NETWORK_BUY_HELI_STRIKE(rage::scrNativeCallContext* src)
@@ -248,7 +248,7 @@ namespace big
 			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			NETWORK::NETWORK_BUY_HELI_STRIKE(cost, p1, p2, p3);
+			MONEY::NETWORK_BUY_HELI_STRIKE(cost, p1, p2, p3);
 		}
 
 		void NETWORK_BUY_BOUNTY(rage::scrNativeCallContext* src)
@@ -262,7 +262,7 @@ namespace big
 			auto p3 = src->get_arg<BOOL>(3);
 			auto p4 = src->get_arg<Any>(4);
 
-			NETWORK::NETWORK_BUY_BOUNTY(amount, victim, p2, p3, p4);
+			MONEY::NETWORK_BUY_BOUNTY(amount, victim, p2, p3, p4);
 		}
 
 		void NETWORK_BUY_FAIRGROUND_RIDE(rage::scrNativeCallContext* src)
@@ -276,7 +276,7 @@ namespace big
 			auto p3 = src->get_arg<BOOL>(3);
 			auto p4 = src->get_arg<Any>(4);
 
-			NETWORK::NETWORK_BUY_FAIRGROUND_RIDE(amount, p1, p2, p3, p4);
+			MONEY::NETWORK_BUY_FAIRGROUND_RIDE(amount, p1, p2, p3, p4);
 		}
 
 		void NETWORK_SPENT_MOVE_YACHT(rage::scrNativeCallContext* src)
@@ -288,7 +288,7 @@ namespace big
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 
-			NETWORK::NETWORK_SPENT_MOVE_YACHT(amount, p1, p2);
+			MONEY::NETWORK_SPENT_MOVE_YACHT(amount, p1, p2);
 		}
 
 		void NETWORK_SPENT_HANGAR_UTILITY_CHARGES(rage::scrNativeCallContext* src)
@@ -300,7 +300,7 @@ namespace big
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 
-			NETWORK::NETWORK_SPENT_HANGAR_UTILITY_CHARGES(amount, p1, p2);
+			MONEY::NETWORK_SPENT_HANGAR_UTILITY_CHARGES(amount, p1, p2);
 		}
 
 		void NETWORK_SPENT_HANGAR_STAFF_CHARGES(rage::scrNativeCallContext* src)
@@ -312,7 +312,7 @@ namespace big
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 
-			NETWORK::NETWORK_SPENT_HANGAR_STAFF_CHARGES(amount, p1, p2);
+			MONEY::NETWORK_SPENT_HANGAR_STAFF_CHARGES(amount, p1, p2);
 		}
 
 		void NETWORK_CASINO_BUY_CHIPS(rage::scrNativeCallContext* src)
