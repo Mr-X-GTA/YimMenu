@@ -103,6 +103,14 @@ namespace big
 		add_native_detour("shop_controller"_J, NativeIndex::IS_PED_SHOOTING, all_scripts::RETURN_FALSE); // prevent exploit reports
 		add_native_detour("shop_controller"_J, NativeIndex::SET_WARNING_MESSAGE_WITH_HEADER, shop_controller::SET_WARNING_MESSAGE_WITH_HEADER);
 		add_native_detour("shop_controller"_J, NativeIndex::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT, shop_controller::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_GET_PRICE, shop_controller::NET_GAMESERVER_GET_PRICE);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_ITEM_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_IS_VALID);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_IS_CATALOG_CURRENT, shop_controller::NET_GAMESERVER_IS_CATALOG_CURRENT);
+		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS);
 
 		add_native_detour("freemode"_J, NativeIndex::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH, freemode::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH);
 		add_native_detour("freemode"_J, NativeIndex::STAT_GET_INT, freemode::STAT_GET_INT);

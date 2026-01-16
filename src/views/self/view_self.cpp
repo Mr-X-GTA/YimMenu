@@ -30,6 +30,14 @@ namespace big
 		ImGui::BeginGroup();
 
 		components::command_checkbox<"godmode">();
+		if (ImGui::Checkbox("Free Shopping", &g.self.free_shopping))
+		{
+			// Setting changed
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Allows you to purchase items for free. Works with shops, services, and websites (Legendary Motorsport, etc.).");
+		}
 		components::command_checkbox<"otr">();
 		const auto gpbd_fm_3 = scr_globals::gpbd_fm_3.as<GPBD_FM_3*>();
 		if (g.self.off_radar && *g_pointers->m_gta.m_is_session_started && gpbd_fm_3->Entries[self::id].BossGoon.Boss == self::id)

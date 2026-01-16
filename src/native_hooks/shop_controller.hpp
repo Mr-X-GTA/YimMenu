@@ -51,5 +51,117 @@ namespace big
 
 			GRAPHICS::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT(arg0);
 		}
+
+		void NET_GAMESERVER_GET_PRICE(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<int>(0);
+				return;
+			}
+			
+			// We can call the native directly since we are replacing the handler, 
+			// checking native_hooks.cpp details, it appears standard pattern.
+			// However, since we don't have the original handler passed in easily here 
+			// (native_hooks uses a map), and calling the native via namespace calls the invoke logic
+			// which uses the handler table?
+			// If we replace the handler in the script table, calling it from C++ invoker 
+			// (which usually uses the global table or a separate mechanism) should be fine 
+			// IF the C++ invoker doesn't use the script table we just hooked.
+			// BigBase / YimMenu invoker typically finds the handler from the global table.
+			// The `add_native_detour` replaces it in the *script program's* import table.
+			// So calling it globally is safe.
+			
+			auto itemHash = src->get_arg<Hash>(0);
+			auto categoryHash = src->get_arg<Hash>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			
+			// Native: 0xC27009422FCCA88D -> NET_GAMESERVER_GET_PRICE
+			// We need to define it or find it. The user provided the definition.
+			// Let's assume it's available via NETSHOPPING namespace or similar if defined in natives.hpp
+			// or we can use invoke<int>(0xC27009422FCCA88D, ...)
+			
+			src->set_return_value<int>(NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
+		}
+
+		void NET_GAMESERVER_CATALOG_ITEM_IS_VALID(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto name = src->get_arg<const char*>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CATALOG_ITEM_IS_VALID(name));
+		}
+
+		void NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto hash = src->get_arg<Hash>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID(hash));
+		}
+
+		void NET_GAMESERVER_CATALOG_IS_VALID(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CATALOG_IS_VALID());
+		}
+
+		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
+		{
+			auto transactionId = src->get_arg<int*>(0);
+			auto categoryHash = src->get_arg<Hash>(1);
+			auto itemHash = src->get_arg<Hash>(2);
+			auto actionTypeHash = src->get_arg<Hash>(3);
+			auto value = src->get_arg<int>(4);
+			auto flags = src->get_arg<int>(5);
+
+			if (g.settings.self.free_shopping)
+				value = 0;
+
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
+		}
+
+		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
+		}
+
+		void NET_GAMESERVER_IS_CATALOG_CURRENT(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_IS_CATALOG_CURRENT());
+		}
+
+		void NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(rage::scrNativeCallContext* src)
+		{
+			if (g.settings.self.free_shopping)
+			{
+				auto state = src->get_arg<int*>(0);
+				if (state)
+					*state = 1; // Finished
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(src->get_arg<int*>(0)));
+		}
 	}
 }
