@@ -103,14 +103,26 @@ namespace big
 		add_native_detour("shop_controller"_J, NativeIndex::IS_PED_SHOOTING, all_scripts::RETURN_FALSE); // prevent exploit reports
 		add_native_detour("shop_controller"_J, NativeIndex::SET_WARNING_MESSAGE_WITH_HEADER, shop_controller::SET_WARNING_MESSAGE_WITH_HEADER);
 		add_native_detour("shop_controller"_J, NativeIndex::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT, shop_controller::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_GET_PRICE, shop_controller::NET_GAMESERVER_GET_PRICE);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_ITEM_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_IS_VALID);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_IS_CATALOG_CURRENT, shop_controller::NET_GAMESERVER_IS_CATALOG_CURRENT);
-		add_native_detour("shop_controller"_J, NativeIndex::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_GET_PRICE, shop_controller::NET_GAMESERVER_GET_PRICE);
+		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_ITEM_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_IS_VALID);
+		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID);
+		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
+		add_native_detour(NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
+		add_native_detour(NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_IS_CATALOG_CURRENT, shop_controller::NET_GAMESERVER_IS_CATALOG_CURRENT);
+		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS);
+		add_native_detour(NativeIndex::NETWORK_BUY_ITEM, shop_controller::NETWORK_BUY_ITEM);
+		add_native_detour(NativeIndex::NETWORK_BUY_PROPERTY, shop_controller::NETWORK_BUY_PROPERTY);
+		add_native_detour(NativeIndex::NETWORK_DEDUCT_CASH, shop_controller::NETWORK_DEDUCT_CASH);
+		add_native_detour(NativeIndex::NETWORK_BUY_HEALTHCARE, shop_controller::NETWORK_BUY_HEALTHCARE);
+		add_native_detour(NativeIndex::NETWORK_BUY_AIRSTRIKE, shop_controller::NETWORK_BUY_AIRSTRIKE);
+		add_native_detour(NativeIndex::NETWORK_BUY_HELI_STRIKE, shop_controller::NETWORK_BUY_HELI_STRIKE);
+		add_native_detour(NativeIndex::NETWORK_BUY_BOUNTY, shop_controller::NETWORK_BUY_BOUNTY);
+		add_native_detour(NativeIndex::NETWORK_BUY_FAIRGROUND_RIDE, shop_controller::NETWORK_BUY_FAIRGROUND_RIDE);
+		add_native_detour(NativeIndex::NETWORK_SPENT_MOVE_YACHT, shop_controller::NETWORK_SPENT_MOVE_YACHT);
+		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_UTILITY_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_UTILITY_CHARGES);
+		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_STAFF_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_STAFF_CHARGES);
+		add_native_detour(NativeIndex::NETWORK_CASINO_BUY_CHIPS, shop_controller::NETWORK_CASINO_BUY_CHIPS);
 
 		add_native_detour("freemode"_J, NativeIndex::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH, freemode::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH);
 		add_native_detour("freemode"_J, NativeIndex::STAT_GET_INT, freemode::STAT_GET_INT);
