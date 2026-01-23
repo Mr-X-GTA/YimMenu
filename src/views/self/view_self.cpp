@@ -38,6 +38,17 @@ namespace big
 		{
 			ImGui::SetTooltip("Allows you to purchase items for free. Works with shops, services, and websites (Legendary Motorsport, etc.).");
 		}
+		if (ImGui::Button("Force Cloud Save"))
+		{
+			g_fiber_pool->queue_job([] {
+				STATS::STAT_SAVE(0, 0, 3, 0);
+				g_notification_service.push_success("STAT_SAVE", "Cloud save forced.");
+			});
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Forces the game to save to cloud.");
+		}
 		components::command_checkbox<"otr">();
 		const auto gpbd_fm_3 = scr_globals::gpbd_fm_3.as<GPBD_FM_3*>();
 		if (g.self.off_radar && *g_pointers->m_gta.m_is_session_started && gpbd_fm_3->Entries[self::id].BossGoon.Boss == self::id)

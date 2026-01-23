@@ -138,6 +138,23 @@ namespace big
 		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_UTILITY_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_UTILITY_CHARGES);
 		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_STAFF_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_STAFF_CHARGES);
 		add_native_detour(NativeIndex::NETWORK_CASINO_BUY_CHIPS, shop_controller::NETWORK_CASINO_BUY_CHIPS);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY, shop_controller::NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_WAREHOUSE_PROPERTY, shop_controller::NETWORK_SPENT_UPGRADE_WAREHOUSE_PROPERTY);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_IMPEXP_WAREHOUSE_PROPERTY, shop_controller::NETWORK_SPENT_UPGRADE_IMPEXP_WAREHOUSE_PROPERTY);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_OFFICE_GARAGE, shop_controller::NETWORK_SPENT_UPGRADE_OFFICE_GARAGE);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_HANGAR, shop_controller::NETWORK_SPENT_UPGRADE_HANGAR);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_TRUCK, shop_controller::NETWORK_SPENT_UPGRADE_TRUCK);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPRADE_BUNKER, shop_controller::NETWORK_SPENT_UPRADE_BUNKER);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_BASE, shop_controller::NETWORK_SPENT_UPGRADE_BASE);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_HACKER_TRUCK, shop_controller::NETWORK_SPENT_UPGRADE_HACKER_TRUCK);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_NIGHTCLUB_AND_WAREHOUSE, shop_controller::NETWORK_SPENT_UPGRADE_NIGHTCLUB_AND_WAREHOUSE);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_ARENA, shop_controller::NETWORK_SPENT_UPGRADE_ARENA);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_CASINO, shop_controller::NETWORK_SPENT_UPGRADE_CASINO);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_ARCADE, shop_controller::NETWORK_SPENT_UPGRADE_ARCADE);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_SUB, shop_controller::NETWORK_SPENT_UPGRADE_SUB);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_AUTOSHOP, shop_controller::NETWORK_SPENT_UPGRADE_AUTOSHOP);
+		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_AGENCY, shop_controller::NETWORK_SPENT_UPGRADE_AGENCY);
+		add_native_detour(NativeIndex::_NETWORK_SPENT_GENERIC, shop_controller::_NETWORK_SPENT_GENERIC);
 
 		add_native_detour("freemode"_J, NativeIndex::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH, freemode::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH);
 		add_native_detour("freemode"_J, NativeIndex::STAT_GET_INT, freemode::STAT_GET_INT);
