@@ -287,12 +287,16 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
+				if (auto tid = src->get_arg<int*>(0))
+					*tid = 1337;
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
-			auto p0 = src->get_arg<int>(0);
-			auto p1 = src->get_arg<Any>(1);
-			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_START(p0, p1));
+			auto transactionId = src->get_arg<int*>(0);
+			auto categoryHash = src->get_arg<Hash>(1);
+			auto actionHash = src->get_arg<Hash>(2);
+			auto flags = src->get_arg<int>(3);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_START(transactionId, categoryHash, actionHash, flags));
 		}
 
 		void NET_GAMESERVER_BASKET_ADD_ITEM(rage::scrNativeCallContext* src)
