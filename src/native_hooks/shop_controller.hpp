@@ -135,10 +135,101 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				src->set_return_value<BOOL>(FALSE);
+				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
+		}
+
+		void NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				if (auto p0 = src->get_arg<int*>(0))
+					*p0 = 1; // Success
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto p0 = src->get_arg<int*>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(p0));
+		}
+
+		void NET_GAMESERVER_START_SESSION(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto charSlot = src->get_arg<int>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_START_SESSION(charSlot));
+		}
+
+		void NET_GAMESERVER_START_SESSION_PENDING(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_START_SESSION_PENDING());
+		}
+
+		void NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				if (auto p0 = src->get_arg<int*>(0))
+					*p0 = 1; // Success
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto p0 = src->get_arg<int*>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(p0));
+		}
+
+		void NET_GAMESERVER_IS_SESSION_REFRESH_PENDING(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_IS_SESSION_REFRESH_PENDING());
+		}
+
+		void NET_GAMESERVER_TRANSACTION_IN_PROGRESS(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_TRANSACTION_IN_PROGRESS());
+		}
+
+		void NET_GAMESERVER_IS_SESSION_VALID(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto charSlot = src->get_arg<int>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_IS_SESSION_VALID(charSlot));
+		}
+
+		void NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				if (auto p0 = src->get_arg<int*>(0))
+					*p0 = 0;
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto p0 = src->get_arg<int*>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(p0));
 		}
 
 		void NET_GAMESERVER_IS_CATALOG_CURRENT(rage::scrNativeCallContext* src)
@@ -324,6 +415,39 @@ namespace big
 			auto p1 = src->get_arg<int>(1);
 
 			MONEY::NETWORK_CASINO_BUY_CHIPS(amount, p1);
+		}
+
+		void NETWORK_CAN_SPEND_MONEY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto p0 = src->get_arg<Any>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<BOOL>(3);
+			auto p4 = src->get_arg<Any>(4);
+			auto p5 = src->get_arg<Any>(5);
+			src->set_return_value<BOOL>(MONEY::NETWORK_CAN_SPEND_MONEY(p0, p1, p2, p3, p4, p5));
+		}
+
+		void NETWORK_CAN_SPEND_MONEY2(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto p0 = src->get_arg<Any>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<BOOL>(3);
+			auto p4 = src->get_arg<Any*>(4);
+			auto p5 = src->get_arg<Any>(5);
+			auto p6 = src->get_arg<Any>(6);
+			src->set_return_value<BOOL>(MONEY::NETWORK_CAN_SPEND_MONEY2(p0, p1, p2, p3, p4, p5, p6));
 		}
 	}
 }

@@ -109,6 +109,14 @@ namespace big
 		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
 		add_native_detour(NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
 		add_native_detour(NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_START_SESSION, shop_controller::NET_GAMESERVER_START_SESSION);
+		add_native_detour(NativeIndex::NET_GAMESERVER_START_SESSION_PENDING, shop_controller::NET_GAMESERVER_START_SESSION_PENDING);
+		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_IS_SESSION_REFRESH_PENDING, shop_controller::NET_GAMESERVER_IS_SESSION_REFRESH_PENDING);
+		add_native_detour(NativeIndex::NET_GAMESERVER_TRANSACTION_IN_PROGRESS, shop_controller::NET_GAMESERVER_TRANSACTION_IN_PROGRESS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_IS_SESSION_VALID, shop_controller::NET_GAMESERVER_IS_SESSION_VALID);
+		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE, shop_controller::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE);
 		add_native_detour(NativeIndex::NET_GAMESERVER_IS_CATALOG_CURRENT, shop_controller::NET_GAMESERVER_IS_CATALOG_CURRENT);
 		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS);
 		add_native_detour(NativeIndex::NETWORK_BUY_ITEM, shop_controller::NETWORK_BUY_ITEM);
@@ -119,6 +127,8 @@ namespace big
 		add_native_detour(NativeIndex::NETWORK_BUY_HELI_STRIKE, shop_controller::NETWORK_BUY_HELI_STRIKE);
 		add_native_detour(NativeIndex::NETWORK_BUY_BOUNTY, shop_controller::NETWORK_BUY_BOUNTY);
 		add_native_detour(NativeIndex::NETWORK_BUY_FAIRGROUND_RIDE, shop_controller::NETWORK_BUY_FAIRGROUND_RIDE);
+		add_native_detour(NativeIndex::NETWORK_CAN_SPEND_MONEY, shop_controller::NETWORK_CAN_SPEND_MONEY);
+		add_native_detour(NativeIndex::NETWORK_CAN_SPEND_MONEY2, shop_controller::NETWORK_CAN_SPEND_MONEY2);
 		add_native_detour(NativeIndex::NETWORK_SPENT_MOVE_YACHT, shop_controller::NETWORK_SPENT_MOVE_YACHT);
 		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_UTILITY_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_UTILITY_CHARGES);
 		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_STAFF_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_STAFF_CHARGES);
