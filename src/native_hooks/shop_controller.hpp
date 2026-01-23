@@ -290,7 +290,9 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
-			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_START());
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_START(p0, p1));
 		}
 
 		void NET_GAMESERVER_BASKET_ADD_ITEM(rage::scrNativeCallContext* src)
