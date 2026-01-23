@@ -64,32 +64,9 @@ namespace big
 
 		void NET_GAMESERVER_GET_PRICE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(0);
-				return;
-			}
-			
-			// We can call the native directly since we are replacing the handler, 
-			// checking native_hooks.cpp details, it appears standard pattern.
-			// However, since we don't have the original handler passed in easily here 
-			// (native_hooks uses a map), and calling the native via namespace calls the invoke logic
-			// which uses the handler table?
-			// If we replace the handler in the script table, calling it from C++ invoker 
-			// (which usually uses the global table or a separate mechanism) should be fine 
-			// IF the C++ invoker doesn't use the script table we just hooked.
-			// BigBase / YimMenu invoker typically finds the handler from the global table.
-			// The `add_native_detour` replaces it in the *script program's* import table.
-			// So calling it globally is safe.
-			
 			auto itemHash = src->get_arg<Hash>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto p2 = src->get_arg<BOOL>(2);
-			
-			// Native: 0xC27009422FCCA88D -> NET_GAMESERVER_GET_PRICE
-			// We need to define it or find it. The user provided the definition.
-			// Let's assume it's available via NETSHOPPING namespace or similar if defined in natives.hpp
-			// or we can use invoke<int>(0xC27009422FCCA88D, ...)
 			
 			src->set_return_value<int>(NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
 		}
@@ -852,33 +829,33 @@ namespace big
 			MONEY::NETWORK_SPENT_PURCHASE_NIGHTCLUB_AND_WAREHOUSE(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_ARENA(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_ARENA(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
 
 			auto amount = src->get_arg<int>(0);
-			auto p1 = src->get_arg<Any>(1);
-			auto p2 = src->get_arg<Any>(2);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<const char*>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_ARENA(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_ARENA(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_CASINO(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_CASINO(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
 
 			auto amount = src->get_arg<int>(0);
-			auto p1 = src->get_arg<Any>(1);
-			auto p2 = src->get_arg<Any>(2);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<Any*>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_CASINO(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_CASINO(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_ARCADE(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_ARCADE(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
@@ -888,10 +865,10 @@ namespace big
 			auto p2 = src->get_arg<Any>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_ARCADE(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_ARCADE(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_SUB(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_SUB(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
@@ -901,10 +878,10 @@ namespace big
 			auto p2 = src->get_arg<Any>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_SUB(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_SUB(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_AUTOSHOP(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_AUTOSHOP(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
@@ -914,10 +891,10 @@ namespace big
 			auto p2 = src->get_arg<Any>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_AUTOSHOP(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_AUTOSHOP(amount, p1, p2, p3);
 		}
 
-		void NETWORK_SPENT_UPGRADE_AGENCY(rage::scrNativeCallContext* src)
+		void NETWORK_SPEND_UPGRADE_AGENCY(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
@@ -927,7 +904,217 @@ namespace big
 			auto p2 = src->get_arg<Any>(2);
 			auto p3 = src->get_arg<Any>(3);
 
-			MONEY::NETWORK_SPENT_UPGRADE_AGENCY(amount, p1, p2, p3);
+			MONEY::NETWORK_SPEND_UPGRADE_AGENCY(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_ARENA(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<const char*>(3);
+
+			MONEY::NETWORK_SPEND_BUY_ARENA(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_CASINO(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<Any*>(3);
+
+			MONEY::NETWORK_SPEND_BUY_CASINO(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_ARCADE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPEND_BUY_ARCADE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_SUB(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPEND_BUY_SUB(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_AUTOSHOP(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPEND_BUY_AUTOSHOP(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPEND_BUY_AGENCY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPEND_BUY_AGENCY(amount, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_BUY_MFGARAGE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<Any>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::_NETWORK_SPEND_BUY_MFGARAGE(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_UPGRADE_MFGARAGE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<Any>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::_NETWORK_SPEND_UPGRADE_MFGARAGE(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_BUY_ACID_LAB(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<Any>(1);
+			auto p1 = src->get_arg<Any>(2);
+			auto p2 = src->get_arg<Any>(3);
+			auto p3 = src->get_arg<Any>(4);
+
+			MONEY::_NETWORK_SPEND_BUY_ACID_LAB(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<Any>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::_NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<int>(3);
+
+			MONEY::_NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<int>(3);
+
+			MONEY::_NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_UPGRADE_ACID_LAB_MINES(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<int>(3);
+
+			MONEY::_NETWORK_SPEND_UPGRADE_ACID_LAB_MINES(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPENT_AIR_FREIGHT(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(3, 0);
+
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<int>(3);
+			auto p4 = src->get_arg<int>(4);
+			auto p5 = src->get_arg<int>(5);
+
+			MONEY::_NETWORK_SPENT_AIR_FREIGHT(p0, p1, p2, p3, p4, p5);
+		}
+
+		void _NETWORK_SPENT_STEALTH_MODULE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<Hash>(3);
+
+			MONEY::_NETWORK_SPENT_STEALTH_MODULE(amount, p1, p2, p3);
+		}
+
+		void _NETWORK_SPENT_MISSILE_JAMMER(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<Hash>(3);
+
+			MONEY::_NETWORK_SPENT_MISSILE_JAMMER(amount, p1, p2, p3);
 		}
 
 		void _NETWORK_SPENT_GENERIC(rage::scrNativeCallContext* src)
