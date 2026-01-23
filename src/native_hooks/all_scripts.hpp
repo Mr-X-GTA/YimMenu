@@ -21,6 +21,9 @@ namespace big
 			if (hash == 0x96F02EE6)
 				return_value = return_value || g.settings.dev_dlc;
 
+			if (g.self.free_shopping)
+				return_value = true;
+
 			src->set_return_value<BOOL>((BOOL)return_value);
 		}
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "native_hooks.hpp"
 #include "core/scr_globals.hpp"
+#include "util/math.hpp"
 
 namespace big
 {
@@ -18,12 +19,21 @@ namespace big
 
 		void SET_WARNING_MESSAGE_WITH_HEADER(rage::scrNativeCallContext* src)
 		{
-			if (auto entry_line = src->get_arg<const char*>(1); !strcmp(entry_line, "CTALERT_F_2"))
+			auto entry_line = src->get_arg<const char*>(1);
+			if (g.self.free_shopping && entry_line && (
+				!strcmp(entry_line, "CTALERT_F_1") ||
+				!strcmp(entry_line, "CTALERT_F_2") ||
+				!strcmp(entry_line, "CTALERT_F_3") ||
+				!strcmp(entry_line, "CTALERT_F_4") ||
+				!strcmp(entry_line, "CTALERT_F_5") ||
+				!strcmp(entry_line, "CTALERT_F_6") ||
+				!strcmp(entry_line, "CT_TRAN_FAIL")
+			))
 			{
 				if (g.notifications.transaction_rate_limit.log)
-					LOG(WARNING) << "Received transaction rate limit";
+					LOG(WARNING) << "Received transaction error: " << entry_line;
 				if (g.notifications.transaction_rate_limit.notify)
-					g_notification_service.push_warning("TRANSACTION_RATE_LIMIT"_T.data(), "TRANSACTION_RATE_LIMIT_MESSAGE"_T.data());
+					g_notification_service.push_warning("TRANSACTION_ERROR"_T.data(), entry_line);
 
 				*scr_globals::transaction_overlimit.as<PBOOL>() = FALSE;
 
@@ -120,7 +130,10 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				src->set_arg<int>(4, 0); // Set cost to 0
+				if (auto tid = src->get_arg<int*>(0))
+					*tid = big::math::rand(1000, 9999);
+				src->set_return_value<BOOL>(TRUE);
+				return;
 			}
 
 			auto transactionId = src->get_arg<int*>(0);
@@ -135,11 +148,6 @@ namespace big
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(FALSE);
-				return;
-			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
 		}
 
@@ -162,6 +170,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(p0));
 		}
@@ -173,6 +182,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto charSlot = src->get_arg<int>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_START_SESSION(charSlot));
 		}
@@ -184,6 +194,7 @@ namespace big
 				src->set_return_value<BOOL>(FALSE);
 				return;
 			}
+
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_START_SESSION_PENDING());
 		}
 
@@ -196,6 +207,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(p0));
 		}
@@ -210,6 +222,23 @@ namespace big
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_IS_SESSION_REFRESH_PENDING());
 		}
 
+		void NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				if (auto p0 = src->get_arg<int*>(0))
+					*p0 = 1; // Success
+				if (auto p1 = src->get_arg<BOOL*>(1))
+					*p1 = TRUE;
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+
+			auto p0 = src->get_arg<int*>(0);
+			auto p1 = src->get_arg<BOOL*>(1);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(p0, p1));
+		}
+
 		void NET_GAMESERVER_TRANSACTION_IN_PROGRESS(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -217,6 +246,7 @@ namespace big
 				src->set_return_value<BOOL>(FALSE);
 				return;
 			}
+
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_TRANSACTION_IN_PROGRESS());
 		}
 
@@ -236,10 +266,11 @@ namespace big
 			if (g.self.free_shopping)
 			{
 				if (auto p0 = src->get_arg<int*>(0))
-					*p0 = 0;
+					*p0 = 0; // No error
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(p0));
 		}
@@ -258,8 +289,7 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				auto state = src->get_arg<int*>(0);
-				if (state)
+				if (auto state = src->get_arg<int*>(0))
 					*state = 1; // Finished
 				src->set_return_value<BOOL>(TRUE);
 				return;
@@ -276,6 +306,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto transactionId = src->get_arg<int>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CHECKOUT_START(transactionId));
 		}
@@ -285,10 +316,11 @@ namespace big
 			if (g.self.free_shopping)
 			{
 				if (auto tid = src->get_arg<int*>(0))
-					*tid = 1337;
+					*tid = big::math::rand(1000, 9999);
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto actionHash = src->get_arg<Hash>(2);
@@ -303,6 +335,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			auto itemData = src->get_arg<Any*>(0);
 			auto quantity = src->get_arg<int>(1);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM(itemData, quantity));
@@ -315,6 +348,7 @@ namespace big
 				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
+
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_END());
 		}
 
@@ -492,6 +526,20 @@ namespace big
 			MONEY::NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY(amount, p1, p2, p3, p4);
 		}
 
+		void NETWORK_SPENT_PURCHASE_OFFICE_PROPERTY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+			auto p4 = src->get_arg<Any>(4);
+
+			MONEY::NETWORK_SPENT_PURCHASE_OFFICE_PROPERTY(amount, p1, p2, p3, p4);
+		}
+
 		void NETWORK_SPENT_UPGRADE_WAREHOUSE_PROPERTY(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -503,6 +551,71 @@ namespace big
 			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::NETWORK_SPENT_UPGRADE_WAREHOUSE_PROPERTY(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_WAREHOUSE_PROPERTY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_WAREHOUSE_PROPERTY(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_CLUB_HOUSE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_CLUB_HOUSE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_UPGRADE_CLUB_HOUSE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_UPGRADE_CLUB_HOUSE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_BUSINESS_PROPERTY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_BUSINESS_PROPERTY(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_UPGRADE_BUSINESS_PROPERTY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_UPGRADE_BUSINESS_PROPERTY(amount, p1, p2, p3);
 		}
 
 		void NETWORK_SPENT_UPGRADE_IMPEXP_WAREHOUSE_PROPERTY(rage::scrNativeCallContext* src)
@@ -518,6 +631,19 @@ namespace big
 			MONEY::NETWORK_SPENT_UPGRADE_IMPEXP_WAREHOUSE_PROPERTY(amount, p1, p2, p3);
 		}
 
+		void NETWORK_SPENT_PURCHASE_IMPEXP_WAREHOUSE_PROPERTY(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any*>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<BOOL>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_IMPEXP_WAREHOUSE_PROPERTY(amount, p1, p2, p3);
+		}
+
 		void NETWORK_SPENT_UPGRADE_OFFICE_GARAGE(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -529,6 +655,32 @@ namespace big
 			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::NETWORK_SPENT_UPGRADE_OFFICE_GARAGE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_OFFICE_GARAGE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_OFFICE_GARAGE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_HANGAR(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_HANGAR(amount, p1, p2, p3);
 		}
 
 		void NETWORK_SPENT_UPGRADE_HANGAR(rage::scrNativeCallContext* src)
@@ -544,6 +696,19 @@ namespace big
 			MONEY::NETWORK_SPENT_UPGRADE_HANGAR(amount, p1, p2, p3);
 		}
 
+		void NETWORK_SPENT_BUY_TRUCK(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_BUY_TRUCK(amount, p1, p2, p3);
+		}
+
 		void NETWORK_SPENT_UPGRADE_TRUCK(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -555,6 +720,19 @@ namespace big
 			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::NETWORK_SPENT_UPGRADE_TRUCK(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_BUY_BUNKER(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_BUY_BUNKER(amount, p1, p2, p3);
 		}
 
 		void NETWORK_SPENT_UPRADE_BUNKER(rage::scrNativeCallContext* src)
@@ -570,6 +748,19 @@ namespace big
 			MONEY::NETWORK_SPENT_UPRADE_BUNKER(amount, p1, p2, p3);
 		}
 
+		void NETWORK_SPENT_BUY_BASE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_BUY_BASE(amount, p1, p2, p3);
+		}
+
 		void NETWORK_SPENT_UPGRADE_BASE(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -581,6 +772,32 @@ namespace big
 			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::NETWORK_SPENT_UPGRADE_BASE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_BUY_TILTROTOR(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_BUY_TILTROTOR(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_UPGRADE_TILTROTOR(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_UPGRADE_TILTROTOR(amount, p1, p2, p3);
 		}
 
 		void NETWORK_SPENT_UPGRADE_HACKER_TRUCK(rage::scrNativeCallContext* src)
@@ -596,6 +813,19 @@ namespace big
 			MONEY::NETWORK_SPENT_UPGRADE_HACKER_TRUCK(amount, p1, p2, p3);
 		}
 
+		void NETWORK_SPENT_PURCHASE_HACKER_TRUCK(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_HACKER_TRUCK(amount, p1, p2, p3);
+		}
+
 		void NETWORK_SPENT_UPGRADE_NIGHTCLUB_AND_WAREHOUSE(rage::scrNativeCallContext* src)
 		{
 			if (g.self.free_shopping)
@@ -607,6 +837,19 @@ namespace big
 			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::NETWORK_SPENT_UPGRADE_NIGHTCLUB_AND_WAREHOUSE(amount, p1, p2, p3);
+		}
+
+		void NETWORK_SPENT_PURCHASE_NIGHTCLUB_AND_WAREHOUSE(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto amount = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
+
+			MONEY::NETWORK_SPENT_PURCHASE_NIGHTCLUB_AND_WAREHOUSE(amount, p1, p2, p3);
 		}
 
 		void NETWORK_SPENT_UPGRADE_ARENA(rage::scrNativeCallContext* src)

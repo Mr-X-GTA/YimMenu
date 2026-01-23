@@ -36,7 +36,7 @@ namespace big
 		}
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Allows you to purchase items for free. Works with shops, services, and websites (Legendary Motorsport, etc.).");
+			ImGui::SetTooltip("Allows you to purchase items for free. Works with shops, services, and websites (Legendary Motorsport, etc.).\nNote: Purchases made with this active are now server-side and should be permanent.");
 		}
 		if (ImGui::Button("Force Cloud Save"))
 		{
