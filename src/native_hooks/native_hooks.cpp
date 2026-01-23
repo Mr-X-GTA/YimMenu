@@ -109,6 +109,7 @@ namespace big
 		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
 		add_native_detour(NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
 		add_native_detour(NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_GET_CATALOG_CLOUD_CRC, shop_controller::NET_GAMESERVER_GET_CATALOG_CLOUD_CRC);
 		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS);
 		add_native_detour(NativeIndex::NET_GAMESERVER_START_SESSION, shop_controller::NET_GAMESERVER_START_SESSION);
 		add_native_detour(NativeIndex::NET_GAMESERVER_START_SESSION_PENDING, shop_controller::NET_GAMESERVER_START_SESSION_PENDING);
@@ -119,6 +120,10 @@ namespace big
 		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE, shop_controller::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE);
 		add_native_detour(NativeIndex::NET_GAMESERVER_IS_CATALOG_CURRENT, shop_controller::NET_GAMESERVER_IS_CATALOG_CURRENT);
 		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS);
+		add_native_detour(NativeIndex::NET_GAMESERVER_CHECKOUT_START, shop_controller::NET_GAMESERVER_CHECKOUT_START);
+		add_native_detour(NativeIndex::NET_GAMESERVER_BASKET_START, shop_controller::NET_GAMESERVER_BASKET_START);
+		add_native_detour(NativeIndex::NET_GAMESERVER_BASKET_ADD_ITEM, shop_controller::NET_GAMESERVER_BASKET_ADD_ITEM);
+		add_native_detour(NativeIndex::NET_GAMESERVER_BASKET_END, shop_controller::NET_GAMESERVER_BASKET_END);
 		add_native_detour(NativeIndex::NETWORK_BUY_ITEM, shop_controller::NETWORK_BUY_ITEM);
 		add_native_detour(NativeIndex::NETWORK_BUY_PROPERTY, shop_controller::NETWORK_BUY_PROPERTY);
 		add_native_detour(NativeIndex::NETWORK_DEDUCT_CASH, shop_controller::NETWORK_DEDUCT_CASH);

@@ -118,15 +118,20 @@ namespace big
 
 		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
 		{
+			if (g.self.free_shopping)
+			{
+				if (auto tid = src->get_arg<int*>(0))
+					*tid = 1337;
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto itemHash = src->get_arg<Hash>(2);
 			auto actionTypeHash = src->get_arg<Hash>(3);
 			auto value = src->get_arg<int>(4);
 			auto flags = src->get_arg<int>(5);
-
-			if (g.self.free_shopping)
-				value = 0;
 
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
 		}
@@ -135,10 +140,20 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				src->set_return_value<BOOL>(TRUE);
+				src->set_return_value<BOOL>(FALSE);
 				return;
 			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
+		}
+
+		void NET_GAMESERVER_GET_CATALOG_CLOUD_CRC(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<Hash>(0xFFFFFFFF);
+				return;
+			}
+			src->set_return_value<Hash>(NETSHOPPING::NET_GAMESERVER_GET_CATALOG_CLOUD_CRC());
 		}
 
 		void NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(rage::scrNativeCallContext* src)
@@ -255,6 +270,49 @@ namespace big
 
 			auto state = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(state));
+		}
+
+		void NET_GAMESERVER_CHECKOUT_START(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto transactionId = src->get_arg<int>(0);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CHECKOUT_START(transactionId));
+		}
+
+		void NET_GAMESERVER_BASKET_START(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_START());
+		}
+
+		void NET_GAMESERVER_BASKET_ADD_ITEM(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			auto itemData = src->get_arg<Any*>(0);
+			auto quantity = src->get_arg<int>(1);
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM(itemData, quantity));
+		}
+
+		void NET_GAMESERVER_BASKET_END(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_END());
 		}
 
 		void NETWORK_BUY_ITEM(rage::scrNativeCallContext* src)
