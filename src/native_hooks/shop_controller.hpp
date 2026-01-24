@@ -47,7 +47,11 @@ namespace big
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 			
-			src->set_return_value<int>(NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
+			int price = NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2);
+			if (g.self.free_shopping)
+				price = 0;
+
+			src->set_return_value<int>(price);
 		}
 
 		void NET_GAMESERVER_CATALOG_ITEM_IS_VALID(rage::scrNativeCallContext* src)
@@ -69,12 +73,6 @@ namespace big
 
 		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_arg<int>(4, 0); // Price
-				src->set_arg<int>(5, src->get_arg<int>(5) | 1); // Set bit 0 (discount flag)
-			}
-
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto itemHash = src->get_arg<Hash>(2);
@@ -87,6 +85,11 @@ namespace big
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
 		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
 		}
 
@@ -336,81 +339,41 @@ namespace big
 
 		void NETWORK_GET_VC_BANK_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(999999999);
-				return;
-			}
 			src->set_return_value<int>(MONEY::NETWORK_GET_VC_BANK_BALANCE());
 		}
 
 		void NETWORK_GET_VC_WALLET_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(999999999);
-				return;
-			}
 			src->set_return_value<int>(MONEY::NETWORK_GET_VC_WALLET_BALANCE(src->get_arg<int>(0)));
 		}
 
 		void NETWORK_GET_VC_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(999999999);
-				return;
-			}
 			src->set_return_value<int>(MONEY::NETWORK_GET_VC_BALANCE());
 		}
 
 		void NETWORK_GET_EVC_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(999999999);
-				return;
-			}
 			src->set_return_value<int>(MONEY::NETWORK_GET_EVC_BALANCE());
 		}
 
 		void NETWORK_GET_PVC_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<int>(999999999);
-				return;
-			}
 			src->set_return_value<int>(MONEY::NETWORK_GET_PVC_BALANCE());
 		}
 
 		void NETWORK_GET_STRING_WALLET_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<const char*>("999,999,999");
-				return;
-			}
 			src->set_return_value<const char*>(MONEY::NETWORK_GET_STRING_WALLET_BALANCE(src->get_arg<int>(0)));
 		}
 
 		void NETWORK_GET_STRING_BANK_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<const char*>("999,999,999");
-				return;
-			}
 			src->set_return_value<const char*>(MONEY::NETWORK_GET_STRING_BANK_BALANCE());
 		}
 
 		void NETWORK_GET_STRING_BANK_WALLET_BALANCE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<const char*>("999,999,999");
-				return;
-			}
 			src->set_return_value<const char*>(MONEY::NETWORK_GET_STRING_BANK_WALLET_BALANCE(src->get_arg<int>(0)));
 		}
 
