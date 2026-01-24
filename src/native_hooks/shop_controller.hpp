@@ -47,11 +47,7 @@ namespace big
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 			
-			int price = NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2);
-			if (g.self.free_shopping)
-				price = 0;
-
-			src->set_return_value<int>(price);
+			src->set_return_value<int>(g.self.free_shopping ? 0 : NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
 		}
 
 		void NET_GAMESERVER_CATALOG_ITEM_IS_VALID(rage::scrNativeCallContext* src)
