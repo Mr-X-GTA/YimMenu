@@ -140,6 +140,12 @@ namespace big
 		add_native_detour(NativeIndex::NETWORK_SPENT_HANGAR_STAFF_CHARGES, shop_controller::NETWORK_SPENT_HANGAR_STAFF_CHARGES);
 		add_native_detour(NativeIndex::NETWORK_GET_VC_BANK_BALANCE, shop_controller::NETWORK_GET_VC_BANK_BALANCE);
 		add_native_detour(NativeIndex::NETWORK_GET_VC_BALANCE, shop_controller::NETWORK_GET_VC_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_VC_WALLET_BALANCE, shop_controller::NETWORK_GET_VC_WALLET_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_EVC_BALANCE, shop_controller::NETWORK_GET_EVC_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_PVC_BALANCE, shop_controller::NETWORK_GET_PVC_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_STRING_WALLET_BALANCE, shop_controller::NETWORK_GET_STRING_WALLET_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_STRING_BANK_BALANCE, shop_controller::NETWORK_GET_STRING_BANK_BALANCE);
+		add_native_detour(NativeIndex::NETWORK_GET_STRING_BANK_WALLET_BALANCE, shop_controller::NETWORK_GET_STRING_BANK_WALLET_BALANCE);
 		add_native_detour(NativeIndex::NETWORK_CASINO_BUY_CHIPS, shop_controller::NETWORK_CASINO_BUY_CHIPS);
 		add_native_detour(NativeIndex::NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY, shop_controller::NETWORK_SPENT_UPGRADE_OFFICE_PROPERTY);
 		add_native_detour(NativeIndex::NETWORK_SPENT_PURCHASE_OFFICE_PROPERTY, shop_controller::NETWORK_SPENT_PURCHASE_OFFICE_PROPERTY);
