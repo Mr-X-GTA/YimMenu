@@ -69,7 +69,6 @@ namespace big
 
 		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
 		{
-			// Server logic removed for local force.
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto itemHash = src->get_arg<Hash>(2);
@@ -77,7 +76,12 @@ namespace big
 			auto value = src->get_arg<int>(4);
 			auto flags = src->get_arg<int>(5);
 
-			src->set_return_value<BOOL>(TRUE);
+			if (g.self.free_shopping)
+			{
+				value = 0;
+			}
+
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
 		}
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
