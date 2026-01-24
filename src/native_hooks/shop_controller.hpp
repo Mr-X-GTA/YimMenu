@@ -498,7 +498,7 @@ namespace big
 				src->set_arg<int>(0, 0);
 
 			auto amount = src->get_arg<int>(0);
-			auto p1 = src->get_arg<Any>(1);
+			auto p1 = src->get_arg<Any*>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<BOOL>(3);
 
@@ -799,7 +799,7 @@ namespace big
 			auto amount = src->get_arg<int>(0);
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
-			auto p3 = src->get_arg<Any>(3);
+			auto p3 = src->get_arg<Any*>(3);
 
 			MONEY::NETWORK_SPEND_UPGRADE_CASINO(amount, p1, p2, p3);
 		}
@@ -812,7 +812,7 @@ namespace big
 			auto amount = src->get_arg<int>(0);
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
-			auto p3 = src->get_arg<Any>(3);
+			auto p3 = src->get_arg<Any*>(3);
 
 			MONEY::NETWORK_SPEND_BUY_CASINO(amount, p1, p2, p3);
 		}
@@ -1110,7 +1110,7 @@ namespace big
 			auto p1 = src->get_arg<BOOL>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 			auto p3 = src->get_arg<BOOL>(3);
-			auto p4 = src->get_arg<Any>(4);
+			auto p4 = src->get_arg<Any*>(4);
 			auto p5 = src->get_arg<Any>(5);
 			auto p6 = src->get_arg<Any>(6);
 			src->set_return_value<BOOL>(MONEY::NETWORK_CAN_SPEND_MONEY2(p0, p1, p2, p3, p4, p5, p6));
