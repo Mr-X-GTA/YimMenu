@@ -47,7 +47,7 @@ namespace big
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto p2 = src->get_arg<BOOL>(2);
 			
-			src->set_return_value<int>(g.self.free_shopping ? 0 : NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
+			src->set_return_value<int>(NETSHOPPING::NET_GAMESERVER_GET_PRICE(itemHash, categoryHash, p2));
 		}
 
 		void NET_GAMESERVER_CATALOG_ITEM_IS_VALID(rage::scrNativeCallContext* src)
@@ -69,12 +69,7 @@ namespace big
 
 		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_arg<int>(4, 0); // Price to 0
-				src->set_arg<int>(5, src->get_arg<int>(5) | 1); // Set bit 0 (discount flag)
-			}
-
+			// Server logic removed for local force.
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto itemHash = src->get_arg<Hash>(2);
@@ -87,6 +82,11 @@ namespace big
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
 		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(FALSE);
+				return;
+			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
 		}
 
@@ -180,7 +180,12 @@ namespace big
 
 			if (g.self.free_shopping && itemData)
 			{
-				itemData[1] = 0; // Price offset in BasketItem struct
+				// Clear price fields in the item structure. 
+				// Layout for BasketItem varies but usually 0x08 or 0x04 is price.
+				// Clearing multiple ints is safer for unknown struct alignment.
+				itemData[1] = 0; 
+				itemData[2] = 0;
+				itemData[3] = 0;
 			}
 
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM((Any*)itemData, quantity));
@@ -189,6 +194,7 @@ namespace big
 		void NET_GAMESERVER_BASKET_END(rage::scrNativeCallContext* src)
 		{
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_END());
+			if (g.self.free_shopping) STATS::STAT_SAVE(0, 0, 3, 0);
 		}
 
 		void NETWORK_BUY_ITEM(rage::scrNativeCallContext* src)
@@ -208,6 +214,7 @@ namespace big
 			auto p9 = src->get_arg<BOOL>(9);
 
 			MONEY::NETWORK_BUY_ITEM(amount, item, p2, p3, p4, item_name, p6, p7, p8, p9);
+			if (g.self.free_shopping) STATS::STAT_SAVE(0, 0, 3, 0);
 		}
 
 		void NETWORK_BUY_PROPERTY(rage::scrNativeCallContext* src)
@@ -221,6 +228,7 @@ namespace big
 			auto p3 = src->get_arg<BOOL>(3);
 
 			MONEY::NETWORK_BUY_PROPERTY(cost, propertyName, p2, p3);
+			if (g.self.free_shopping) STATS::STAT_SAVE(0, 0, 3, 0);
 		}
 
 		void NETWORK_DEDUCT_CASH(rage::scrNativeCallContext* src)
