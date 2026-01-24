@@ -107,10 +107,7 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				if (auto tid = src->get_arg<int*>(0))
-					*tid = big::math::rand(1000, 9999);
-				src->set_return_value<BOOL>(TRUE);
-				return;
+				src->set_arg<int>(4, 0); // Override Price to 0
 			}
 
 			auto transactionId = src->get_arg<int*>(0);
@@ -140,26 +137,15 @@ namespace big
 
 		void NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto p0 = src->get_arg<int*>(0))
-					*p0 = 1; // Success
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS(p0));
+
+			if (g.self.free_shopping && p0)
+				*p0 = 1; // Force Success
 		}
 
 		void NET_GAMESERVER_START_SESSION(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto charSlot = src->get_arg<int>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_START_SESSION(charSlot));
 		}
@@ -177,16 +163,11 @@ namespace big
 
 		void NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto p0 = src->get_arg<int*>(0))
-					*p0 = 1; // Success
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_START_SESSION_STATUS(p0));
+
+			if (g.self.free_shopping && p0)
+				*p0 = 1; // Force Success
 		}
 
 		void NET_GAMESERVER_IS_SESSION_REFRESH_PENDING(rage::scrNativeCallContext* src)
@@ -201,55 +182,35 @@ namespace big
 
 		void NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto p0 = src->get_arg<int*>(0))
-					*p0 = 1; // Success
-				if (auto p1 = src->get_arg<BOOL*>(1))
-					*p1 = TRUE;
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto p0 = src->get_arg<int*>(0);
 			auto p1 = src->get_arg<BOOL*>(1);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_GET_SESSION_STATE_AND_STATUS(p0, p1));
+
+			if (g.self.free_shopping)
+			{
+				if (p0) *p0 = 1;
+				if (p1) *p1 = TRUE;
+			}
 		}
 
 		void NET_GAMESERVER_TRANSACTION_IN_PROGRESS(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(FALSE);
-				return;
-			}
-
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_TRANSACTION_IN_PROGRESS());
 		}
 
 		void NET_GAMESERVER_IS_SESSION_VALID(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
 			auto charSlot = src->get_arg<int>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_IS_SESSION_VALID(charSlot));
 		}
 
 		void NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto p0 = src->get_arg<int*>(0))
-					*p0 = 0; // No error
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto p0 = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_SESSION_ERROR_CODE(p0));
+
+			if (g.self.free_shopping && p0)
+				*p0 = 0; // No Error
 		}
 
 		void NET_GAMESERVER_IS_CATALOG_CURRENT(rage::scrNativeCallContext* src)
@@ -264,40 +225,21 @@ namespace big
 
 		void NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto state = src->get_arg<int*>(0))
-					*state = 1; // Finished
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto state = src->get_arg<int*>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_RETRIEVE_CATALOG_REFRESH_STATUS(state));
+
+			if (g.self.free_shopping && state)
+				*state = 1; // Finished
 		}
 
 		void NET_GAMESERVER_CHECKOUT_START(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto transactionId = src->get_arg<int>(0);
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_CHECKOUT_START(transactionId));
 		}
 
 		void NET_GAMESERVER_BASKET_START(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				if (auto tid = src->get_arg<int*>(0))
-					*tid = big::math::rand(1000, 9999);
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto actionHash = src->get_arg<Hash>(2);
@@ -309,8 +251,7 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				src->set_return_value<BOOL>(TRUE);
-				return;
+				// We don't easily know if there's a price in itemData, but quantity is arg 1.
 			}
 
 			auto itemData = src->get_arg<Any*>(0);
@@ -320,12 +261,6 @@ namespace big
 
 		void NET_GAMESERVER_BASKET_END(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(TRUE);
-				return;
-			}
-
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_END());
 		}
 
@@ -1016,12 +951,25 @@ namespace big
 			if (g.self.free_shopping)
 				src->set_arg<int>(0, 0);
 
-			auto p0 = src->get_arg<Any>(1);
-			auto p1 = src->get_arg<Any>(2);
-			auto p2 = src->get_arg<Any>(3);
-			auto p3 = src->get_arg<Any>(4);
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<Any>(1);
+			auto p2 = src->get_arg<Any>(2);
+			auto p3 = src->get_arg<Any>(3);
 
 			MONEY::_NETWORK_SPEND_BUY_ACID_LAB(p0, p1, p2, p3);
+		}
+
+		void _NETWORK_SPEND_BUY_SUPPLIES(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+				src->set_arg<int>(0, 0);
+
+			auto p0 = src->get_arg<int>(0);
+			auto p1 = src->get_arg<BOOL>(1);
+			auto p2 = src->get_arg<BOOL>(2);
+			auto p3 = src->get_arg<int>(3);
+
+			MONEY::_NETWORK_SPEND_BUY_SUPPLIES(p0, p1, p2, p3);
 		}
 
 		void _NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT(rage::scrNativeCallContext* src)

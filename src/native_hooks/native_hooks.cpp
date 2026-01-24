@@ -180,6 +180,7 @@ namespace big
 		add_native_detour(NativeIndex::_NETWORK_SPEND_BUY_MFGARAGE, shop_controller::_NETWORK_SPEND_BUY_MFGARAGE);
 		add_native_detour(NativeIndex::_NETWORK_SPEND_UPGRADE_MFGARAGE, shop_controller::_NETWORK_SPEND_UPGRADE_MFGARAGE);
 		add_native_detour(NativeIndex::_NETWORK_SPEND_BUY_ACID_LAB, shop_controller::_NETWORK_SPEND_BUY_ACID_LAB);
+		add_native_detour(NativeIndex::_NETWORK_SPEND_BUY_SUPPLIES, shop_controller::_NETWORK_SPEND_BUY_SUPPLIES);
 		add_native_detour(NativeIndex::_NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT, shop_controller::_NETWORK_SPEND_UPGRADE_ACID_LAB_EQUIPMENT);
 		add_native_detour(NativeIndex::_NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR, shop_controller::_NETWORK_SPEND_UPGRADE_ACID_LAB_ARMOR);
 		add_native_detour(NativeIndex::_NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP, shop_controller::_NETWORK_SPEND_UPGRADE_ACID_LAB_SCOOP);
