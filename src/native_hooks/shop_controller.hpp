@@ -182,15 +182,15 @@ namespace big
 			auto itemData = src->get_arg<int*>(0);
 			auto quantity = src->get_arg<int>(1);
 
-			if (g.self.free_shopping && itemData)
-			{
-				// Clear price fields in the item structure. 
-				// Layout for BasketItem varies but usually 0x08 or 0x04 is price.
-				// Clearing multiple ints is safer for unknown struct alignment.
-				itemData[1] = 0; 
-				itemData[2] = 0;
-				itemData[3] = 0;
-			}
+			// if (g.self.free_shopping && itemData)
+			// {
+			// 	// Clear price fields in the item structure. 
+			// 	// Layout for BasketItem varies but usually 0x08 or 0x04 is price.
+			// 	// Clearing multiple ints is safer for unknown struct alignment.
+			// 	itemData[1] = 0; 
+			// 	itemData[2] = 0;
+			// 	itemData[3] = 0;
+			// }
 
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM((Any*)itemData, quantity));
 		}
@@ -901,8 +901,8 @@ namespace big
 
 		void _NETWORK_SPEND_BUY_MFGARAGE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-				src->set_arg<int>(0, 0);
+// 			if (g.self.free_shopping)
+// 				src->set_arg<int>(0, 0);
 
 			auto p0 = src->get_arg<Any>(0);
 			auto p1 = src->get_arg<Any>(1);
@@ -914,8 +914,8 @@ namespace big
 
 		void _NETWORK_SPEND_UPGRADE_MFGARAGE(rage::scrNativeCallContext* src)
 		{
-			if (g.self.free_shopping)
-				src->set_arg<int>(0, 0);
+// 			if (g.self.free_shopping)
+// 				src->set_arg<int>(0, 0);
 
 			auto p0 = src->get_arg<Any>(0);
 			auto p1 = src->get_arg<Any>(1);
