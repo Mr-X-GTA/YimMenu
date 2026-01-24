@@ -198,7 +198,82 @@ namespace big
 		void NET_GAMESERVER_BASKET_END(rage::scrNativeCallContext* src)
 		{
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_END());
-			if (g.self.free_shopping) STATS::STAT_SAVE(0, 0, 3, 0);
+			
+			if (g.self.free_shopping)
+			{
+				// Auto-unlock ownership stats for all major purchasable items
+				// This ensures permanent ownership regardless of server validation
+				
+				const char* prefix = self::char_index ? "MP1_" : "MP0_";
+				
+				// Service Vehicles & Special Garages
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "MULTSTOREY_GAR_OWNED"), 1, true);  // Multi-Floor Garage
+				
+				// Main Properties (set to 1 to mark as owned)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_NIGHTCLUB"), 1, true);       // Nightclub
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_CLUBHOUSE"), 1, true);       // MC Clubhouse
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_OFFICE"), 1, true);          // CEO Office
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_HANGAR"), 1, true);          // Hangar
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_DEFUNCBASE"), 1, true);      // Facility
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_AUTO_SHOP"), 1, true);       // Auto Shop
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_SECURITY_OFFICE_GAR"), 1, true); // Agency
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_ARCADE_GAR1"), 1, true);     // Arcade
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_CASINO_GAR1"), 1, true);     // Casino Penthouse
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_BUSINESSHUB"), 1, true);     // Business Hub (Nightclub Warehouse)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_IE_WAREHOUSE"), 1, true);    // Import/Export Warehouse
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_BAIL_OFFICE"), 1, true);     // Bail Office
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FIXER_HQ"), 1, true);        // Fixer HQ (Salvage Yard)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_HACKER_DEN"), 1, true);      // Hacker Den
+				
+				// Arena Wars Garages
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_ARENAWARS_GAR1"), 1, true);  // Arena Wars Garage 1
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_ARENAWARS_GAR2"), 1, true);  // Arena Wars Garage 2
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_ARENAWARS_GAR3"), 1, true);  // Arena Wars Garage 3
+				
+				// Office Garages
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_OFFICE_GAR1"), 1, true);     // Office Garage 1
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_OFFICE_GAR2"), 1, true);     // Office Garage 2
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_OFFICE_GAR3"), 1, true);     // Office Garage 3
+				
+				// Mega Warehouses
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_MEGAWARE_GAR1"), 1, true);   // Mega Warehouse 1
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_MEGAWARE_GAR2"), 1, true);   // Mega Warehouse 2
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_MEGAWARE_GAR3"), 1, true);   // Mega Warehouse 3
+				
+				// MC Business Factories (Slots 0-5)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT0"), 1, true);       // MC Factory Slot 0
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT1"), 1, true);       // MC Factory Slot 1
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT2"), 1, true);       // MC Factory Slot 2
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT3"), 1, true);       // MC Factory Slot 3
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT4"), 1, true);       // MC Factory Slot 4
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_FAC_SLOT5"), 1, true);       // MC Factory Slot 5
+				
+				// CEO Warehouses (Slots 0-4)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_WHOUSE_SLOT0"), 1, true);    // Warehouse Slot 0
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_WHOUSE_SLOT1"), 1, true);    // Warehouse Slot 1
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_WHOUSE_SLOT2"), 1, true);    // Warehouse Slot 2
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_WHOUSE_SLOT3"), 1, true);    // Warehouse Slot 3
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "PROP_WHOUSE_SLOT4"), 1, true);    // Warehouse Slot 4
+				
+				// Mansions (Chop Shop DLC)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "MANSION_AJ_OWNED"), 1, true);     // Angelo John Mansion
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "MANSION_MD_OWNED"), 1, true);     // Marlowe Drive Mansion
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "MANSION_TH_OWNED"), 1, true);     // Tongva Hills Mansion
+				
+				// Yacht
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "INV_YACHT_MODEL_0"), 1, true);    // Yacht Ownership
+				
+				// Service Vehicles (Warstock)
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "INV_TRUCK_MODEL_0"), 1, true);    // Mobile Operations Center
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "INV_PLANE_MODEL_0"), 1, true);    // Avenger
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "INV_HACKERTRUCK_MODEL_0"), 1, true); // Terrorbyte
+				
+				// Casino Penthouse
+				STATS::STAT_SET_INT(rage::joaat(std::string(prefix) + "CASINOAPT_OWNED"), 1, true);      // Casino Apartment/Penthouse
+				
+				// Force save to persist ownership
+				STATS::STAT_SAVE(0, 0, 3, 0);
+			}
 		}
 
 		void NETWORK_BUY_ITEM(rage::scrNativeCallContext* src)
