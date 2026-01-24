@@ -376,7 +376,7 @@ namespace big
 			std::string persist_outfit        = "";
 			bool persist_outfits_mis          = false;
 			bool interaction_menu_freedom     = false;
-			bool free_shopping                = false; // Added Free Shopping
+			bool free_shopping                = false;
 
 			struct hud
 			{

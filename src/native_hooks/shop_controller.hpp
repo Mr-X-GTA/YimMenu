@@ -69,6 +69,12 @@ namespace big
 
 		void NET_GAMESERVER_BEGIN_SERVICE(rage::scrNativeCallContext* src)
 		{
+			if (g.self.free_shopping)
+			{
+				src->set_arg<int>(4, 0); // Price to 0
+				src->set_arg<int>(5, src->get_arg<int>(5) | 1); // Set bit 0 (discount flag)
+			}
+
 			auto transactionId = src->get_arg<int*>(0);
 			auto categoryHash = src->get_arg<Hash>(1);
 			auto itemHash = src->get_arg<Hash>(2);
@@ -81,11 +87,6 @@ namespace big
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
 		{
-			if (g.self.free_shopping)
-			{
-				src->set_return_value<BOOL>(FALSE);
-				return;
-			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
 		}
 
@@ -174,9 +175,15 @@ namespace big
 
 		void NET_GAMESERVER_BASKET_ADD_ITEM(rage::scrNativeCallContext* src)
 		{
-			auto itemData = src->get_arg<Any*>(0);
+			auto itemData = src->get_arg<int*>(0);
 			auto quantity = src->get_arg<int>(1);
-			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM(itemData, quantity));
+
+			if (g.self.free_shopping && itemData)
+			{
+				itemData[1] = 0; // Price offset in BasketItem struct
+			}
+
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BASKET_ADD_ITEM((Any*)itemData, quantity));
 		}
 
 		void NET_GAMESERVER_BASKET_END(rage::scrNativeCallContext* src)
