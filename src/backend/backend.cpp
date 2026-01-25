@@ -2,7 +2,7 @@
 
 #include "looped/looped.hpp"
 #include "looped_command.hpp"
-#include "script.hpp"
+#include "anleitung.hpp"  // Renamed from script.hpp
 #include "script_patches.hpp"
 #include "services/context_menu/context_menu_service.hpp"
 #include "services/custom_teleport/custom_teleport_service.hpp"
@@ -17,9 +17,9 @@
 
 #include <game_files/GameDataHash.hpp>
 
-namespace big
+namespace baustelle  // BAUSTELLEN MITARBEITER - CONSTRUCTION WORKER THEME!
 {
-	void backend::loop()
+	void baumeister::loop()  // baumeister = master builder / construction supervisor
 	{
 		for (auto& command : g_bool_commands)
 			command->refresh();

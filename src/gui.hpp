@@ -1,9 +1,9 @@
 #pragma once
 #include "common.hpp"
 
-namespace big
+namespace baustelle
 {
-	class gui
+	class blauhelm_oberflaeche  // Hard Hat Interface
 	{
 	public:
 		gui();

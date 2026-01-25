@@ -1,6 +1,7 @@
-#ifndef COMMON_INC
-#define COMMON_INC
+#ifndef BAUSTELLE_MITARBEITER_INC
+#define BAUSTELLE_MITARBEITER_INC
 
+// Baustellen Mitarbeiter Construction Theme
 // clang-format off
 
 #include <sdkddkver.h>
@@ -67,27 +68,27 @@
 
 // clang-format on
 
-namespace big
+namespace baustelle
 {
 	using namespace std::chrono_literals;
 
-	inline HMODULE g_hmodule{};
-	inline HANDLE g_main_thread{};
-	inline DWORD g_main_thread_id{};
-	inline std::atomic_bool g_running{false};
+	inline HMODULE g_baustelle_modul{};  // Baustelle Module
+	inline HANDLE g_hauptarbeiter_thread{};  // Main Worker Thread
+	inline DWORD g_hauptarbeiter_id{};  // Main Worker ID
+	inline std::atomic_bool g_betrieb{false};  // Operating/Running
 
-	inline CPed* g_local_player;
+	inline CPed* g_lokal_arbeiter;  // Local Worker
 }
 
-namespace self
+namespace selbst  // Self
 {
-	inline Ped ped;
-	inline Player id;
-	inline Vector3 pos;
-	inline Vector3 rot;
-	inline Vehicle veh;
-	inline int char_index;
-	inline std::unordered_set<int> spawned_vehicles;
+	inline Ped arbeiter;  // Worker
+	inline Player kennung;  // ID
+	inline Vector3 ort;  // Location
+	inline Vector3 ausrichtung;  // Direction/Rotation
+	inline Vehicle fahrzeug;  // Vehicle
+	inline int charakter_index;  // Character Index
+	inline std::unordered_set<int> gebotsene_fahrzeuge;  // Spawned Vehicles
 }
 
 template<size_t N>

@@ -1,17 +1,17 @@
 #pragma once
 
-namespace big
+namespace baustelle
 {
-	// if this limit is hit you did something wrong coding wise.
-	constexpr auto MAX_POOL_SIZE = 32u;
+	// Maximale Arbeiterkrew - wenn überschritten, hast du beim Programmieren was falsch gemacht
+	constexpr auto MAX_ARBEITER = 32u;
 
-	struct thread_pool_job
+	struct arbeiter_auftrag
 	{
 		std::function<void()> m_func;
 		std::source_location m_source_location;
 	};
 
-	class thread_pool
+	class arbeiter_truppe
 	{
 		std::atomic<bool> m_accept_jobs;
 		std::condition_variable m_data_condition;

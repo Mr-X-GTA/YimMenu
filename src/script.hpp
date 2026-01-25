@@ -1,8 +1,8 @@
 #pragma once
 
-namespace big
+namespace baustelle
 {
-	class script
+	class anleitung
 	{
 		std::string m_name;
 		bool m_enabled;

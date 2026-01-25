@@ -1,12 +1,12 @@
 #pragma once
 #include "lua/lua_manager.hpp"
-#include "script.hpp"
+#include "anleitung.hpp"
 
-namespace big
+namespace baustelle
 {
-	using script_list = std::vector<std::unique_ptr<script>>;
+	using anleitung_liste = std::vector<std::unique_ptr<anleitung>>;
 
-	class script_mgr
+	class anleitung_verwaltung
 	{
 	public:
 		explicit script_mgr() = default;

@@ -11,9 +11,9 @@
 #include "socialclub/ScInfo.hpp"
 #include "util/compile_time_helpers.hpp"
 
-namespace big
+namespace baustelle
 {
-	class pointers
+	class zeiger_verwaltung  // Pointer Management
 	{
 	private:
 		template<cstxpr_str batch_name, auto batch_hash, size_t offset_of_cache_begin_field, size_t offset_of_cache_end_field, memory::batch batch>

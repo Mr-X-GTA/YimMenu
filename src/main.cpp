@@ -34,7 +34,7 @@
 #include "util/is_proton.hpp"
 #include "version.hpp"
 
-namespace big
+namespace baustelle
 {
 	std::string ReadRegistryKeySZ(HKEY hKeyParent, std::string subkey, std::string valueName)
 	{
@@ -44,20 +44,20 @@ namespace big
 		LONG ret           = RegOpenKeyEx(hKeyParent, subkey.c_str(), 0, KEY_READ, &hKey);
 		if (ret != ERROR_SUCCESS)
 		{
-			LOG(INFO) << "Unable to read registry key " << subkey;
+			LOG(INFO) << "Kann Registrierungsschlüssel nicht lesen (Cannot read registry key) " << subkey;
 			return "";
 		}
 		ret = RegQueryValueEx(hKey, valueName.c_str(), NULL, NULL, (LPBYTE)&value, &value_length);
 		RegCloseKey(hKey);
 		if (ret != ERROR_SUCCESS)
 		{
-			LOG(INFO) << "Unable to read registry key " << valueName;
+			LOG(INFO) << "Kann Registrierungsschlüssel nicht lesen (Cannot read registry key) " << valueName;
 			return "";
 		}
 		return std::string(value);
 	}
 
-	DWORD ReadRegistryKeyDWORD(HKEY hKeyParent, std::string subkey, std::string valueName)
+	DWORD RegSchluesselDWORDLesen(HKEY hKeyParent, std::string subkey, std::string valueName)
 	{
 		HKEY hKey;
 		DWORD value;
@@ -65,27 +65,27 @@ namespace big
 		LONG ret           = RegOpenKeyEx(hKeyParent, subkey.c_str(), 0, KEY_READ, &hKey);
 		if (ret != ERROR_SUCCESS)
 		{
-			LOG(INFO) << "Unable to read registry key " << subkey;
+			LOG(INFO) << "Kann Registrierungsschlüssel nicht lesen (Cannot read registry key) " << subkey;
 			return NULL;
 		}
 		ret = RegQueryValueEx(hKey, valueName.c_str(), NULL, NULL, (LPBYTE)&value, &value_length);
 		RegCloseKey(hKey);
 		if (ret != ERROR_SUCCESS)
 		{
-			LOG(INFO) << "Unable to read registry key " << valueName;
+			LOG(INFO) << "Kann Registrierungsschlüssel nicht lesen (Cannot read registry key) " << valueName;
 			return NULL;
 		}
 		return value;
 	}
 
-	std::unique_ptr<char[]> GetWindowsVersion()
+	std::unique_ptr<char[]> Baustellen_VersionErhalten()
 	{
 		typedef LPWSTR(WINAPI * BFS)(LPCWSTR);
 		LPWSTR UTF16   = BFS(GetProcAddress(LoadLibrary("winbrand.dll"), "BrandingFormatString"))(L"%WINDOWS_LONG%");
 		int BufferSize = WideCharToMultiByte(CP_UTF8, 0, UTF16, -1, NULL, 0, NULL, NULL);
 		std::unique_ptr<char[]> UTF8(new char[BufferSize]);
 		WideCharToMultiByte(CP_UTF8, 0, UTF16, -1, UTF8.get(), BufferSize, NULL, NULL);
-		// BrandingFormatString requires a GlobalFree.
+		// BrandingFormatString benötigt GlobalFree (requires a GlobalFree)
 		GlobalFree(UTF16);
 		return UTF8;
 	}
@@ -93,12 +93,12 @@ namespace big
 
 BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 {
-	using namespace big;
+	using namespace baustelle;  // Baustellen Mitarbeiter - Construction Worker Theme!
 	if (reason == DLL_PROCESS_ATTACH)
 	{
 		DisableThreadLibraryCalls(hmod);
-		g_hmodule     = hmod;
-		g_main_thread = CreateThread(
+		g_baustelle_modul     = hmod;
+		g_hauptarbeiter_thread = CreateThread(
 		    nullptr,
 		    0,
 		    [](PVOID) -> DWORD {
@@ -113,34 +113,34 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 			    g_file_manager.init(base_dir);
 
 			    g.init(g_file_manager.get_project_file("./settings.json"));
-			    g_log.initialize("YimMenu", g_file_manager.get_project_file("./cout.log"), g.debug.external_console);
-			    LOG(INFO) << "Settings Loaded and logger initialized.";
+			    g_log.initialize("Baustellen-Mitarbeiter", g_file_manager.get_project_file("./cout.log"), g.debug.external_console);
+			    LOG(INFO) << "Einstellungen geladen und Logger initialisiert (Settings Loaded and logger initialized).";
 
-			    LOG(INFO) << "Yim's Menu Initializing";
-			    LOGF(INFO, "Git Info\n\tBranch:\t{}\n\tHash:\t{}\n\tDate:\t{}", version::GIT_BRANCH, version::GIT_SHA1, version::GIT_DATE);
+			    LOG(INFO) << "Baustellen Mitarbeiter wird initialisiert (Yim's Menu Initializing)";
+			    LOGF(INFO, "Git Informationen (Git Info)\n\tZweig (Branch):\t{}\n\tHash:\t{}\n\tDatum (Date):\t{}", version::GIT_BRANCH, version::GIT_SHA1, version::GIT_DATE);
 
-			    // more tech debt, YAY!
-			    if (is_proton())
-			    {
-				    LOG(INFO) << "Running on proton!";
-			    }
-			    else
-			    {
-				    auto display_version = ReadRegistryKeySZ(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");
-				    auto current_build = ReadRegistryKeySZ(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
-				    auto UBR = ReadRegistryKeyDWORD(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "UBR");
-				    LOG(INFO) << GetWindowsVersion() << " Version " << display_version << " (OS Build " << current_build << "." << UBR << ")";
+// Mehr technische Schulden (mehr tech debt), JUHUU! / More technical construction debt, YAY!
+		    if (is_proton())
+		    {
+			    LOG(INFO) << "Läuft auf Proton (Running on proton)!";
+		    }
+		    else
+		    {
+			    auto display_version = ReadRegistryKeySZ(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "DisplayVersion");
+			    auto current_build = ReadRegistryKeySZ(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild");
+			    auto UBR = ReadRegistryKeyDWORD(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "UBR");
+			    LOG(INFO) << Baustellen_VersionErhalten() << " Version " << display_version << " (Baustelle Build " << current_build << "." << UBR << ")";
 			    }
 
 #ifndef NDEBUG
-			    LOG(WARNING) << "Debug Build. Switch to RelWithDebInfo or Release Build for a more stable experience";
+			    LOG(WARNING) << "Debug-Bauordnung (Debug Build). Wechseln Sie zu RelWithDebInfo oder Release Build für ein stabileres Baustellen-Erlebnis (for a more stable experience)";
 #endif
 
-			    auto thread_pool_instance = std::make_unique<thread_pool>();
-			    LOG(INFO) << "Thread pool initialized.";
+auto thread_pool_instance = std::make_unique<arbeiter_truppe>();
+		    LOG(INFO) << "Arbeiter Truppe initialisiert (Thread pool initialized).";
 
-			    auto pointers_instance = std::make_unique<pointers>();
-			    LOG(INFO) << "Pointers initialized.";
+auto pointers_instance = std::make_unique<zeiger_verwaltung>();
+		    LOG(INFO) << "Zeiger Verwaltung initialisiert (Pointers initialized).";
 
 			    if (!*g_pointers->m_gta.m_anticheat_initialized_hash)
 			    {
@@ -153,21 +153,17 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 			    }
 
 			    auto byte_patch_manager_instance = std::make_unique<byte_patch_manager>();
-			    LOG(INFO) << "Byte Patch Manager initialized.";
-
+		    LOG(INFO) << "Byte-Pflaster-Verwaltung initialisiert (Byte Patch Manager initialized).";
 			    g_renderer.init();
-			    LOG(INFO) << "Renderer initialized.";
-			    auto gui_instance = std::make_unique<gui>();
-
-			    auto fiber_pool_instance = std::make_unique<fiber_pool>(11);
-			    LOG(INFO) << "Fiber pool initialized.";
+		    LOG(INFO) << "Zeichner initialisiert (Renderer initialized).";
+		    auto gui_instance = std::make_unique<blauhelm_oberflaeche>();
+auto fiber_pool_instance = std::make_unique<werkzeug_schicht>(11);
+		    LOG(INFO) << "Werkzeug Schicht initialisiert (Fiber pool initialized).  // 11 Handwerker (workers)";
 
 			    g_http_client.init(g_file_manager.get_project_file("./proxy_settings.json"));
-			    LOG(INFO) << "HTTP Client initialized.";
-
+		    LOG(INFO) << "HTTP-Klient initialisiert (HTTP Client initialized).";
 			    g_translation_service.init();
-			    LOG(INFO) << "Translation Service initialized.";
-
+		    LOG(INFO) << "Übersetzungsdienst initialisiert (Translation Service initialized).  // Baustellen Mitarbeiter Edition!";
 			    auto hooking_instance = std::make_unique<hooking>();
 			    LOG(INFO) << "Hooking initialized.";
 

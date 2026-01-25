@@ -1,9 +1,9 @@
 #pragma once
 #include "common.hpp"
 
-namespace big
+namespace baustelle
 {
-	class backend
+	class baumeister
 	{
 	public:
 		static void loop();

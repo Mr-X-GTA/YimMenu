@@ -1,8 +1,8 @@
 #pragma once
 
-namespace big
+namespace baustelle
 {
-	class fiber_pool
+	class werkzeug_schicht
 	{
 	public:
 		explicit fiber_pool(std::size_t num_fibers);
@@ -25,5 +25,5 @@ namespace big
 		int m_num_fibers;
 	};
 
-	inline fiber_pool* g_fiber_pool{};
+	inline werkzeug_schicht* g_werkzeug{};  // Baustellen Werkzeug (Construction Tools)
 }

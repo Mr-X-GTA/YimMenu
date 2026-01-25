@@ -8,9 +8,9 @@
 #include "util/math.hpp"
 #include "util/string_operations.hpp"
 
-namespace big
+namespace baustelle
 {
-	class command
+	class befehl
 	{
 	protected:
 		std::string m_name;

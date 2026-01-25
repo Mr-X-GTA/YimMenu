@@ -3,9 +3,9 @@
 #include "file_manager/file.hpp"
 #include "file_manager/folder.hpp"
 
-namespace big
+namespace baustelle
 {
-	class file_manager final
+	class datei_verwaltung  // File Management final
 	{
 	public:
 		file_manager() = default;
