@@ -1,15 +1,16 @@
 # YimMenu
 A mod menu for Grand Theft Auto V Legacy
 
-## How to use
-1. Download the latest version of FSL from [here](https://www.unknowncheats.me/forum/grand-theft-auto-v/616977-fsl-local-gtao-saves.html) and place WINMM.dll in your GTA V directory
-2. Download YimMenu from [GitHub Releases](https://github.com/Mr-X-GTA/YimMenu/releases/tag/nightly)
-3. Download an injector, such as [Xenos](https://www.unknowncheats.me/forum/general-programming-and-reversing/124013-xenos-injector-v2-3-2-a.html)
-4. Open Rockstar Launcher, select Grand Theft Auto V Legacy, go to settings, and disable BattlEye. If you are using Steam or Epic Games, you may have to pass the -nobattleye command line parameter as well
-5. Launch GTA V, then use your injector to inject YimMenu.dll at the main menu
-
+HOW USE
+-REMOVE BUG
+1. INJECT
 ---
 
-# Message to Rockstar Security Team:
+# Message to Rockstar Security Team: Im dmca
 
-## You haven't seen the last of us
+
+
+
+Made by Broshan
+LINUX KERNEL: https://cachyos.org/
+SENT FROM: GALAXY SMART FRIDGE 4.4.4 ANDROID KITKAT
