@@ -5,7 +5,7 @@
 #include "script.hpp"
 #include "util/mobile.hpp"
 
-#define MAX_GARAGE_NUM 33
+#define MAX_GARAGE_NUM 36
 
 namespace big
 {
@@ -43,8 +43,11 @@ namespace big
 			case 27: return 337;
 			case 28: return 350;
 			case 29: return 363;
-		    case 31: return 515;
-		    case 32: return 537;
+			case 31: return 515;
+			case 32: return 537;
+			case 33: return 547;
+			case 34: return 567;
+			case 35: return 587;
 			case MAX_GARAGE_NUM+0: return 156; //Mobile Operations Center
 			case MAX_GARAGE_NUM+1: return 224; //Nightclub B1
 			case MAX_GARAGE_NUM+2: return 223; //Terrorbyte
@@ -61,7 +64,7 @@ namespace big
 			case MAX_GARAGE_NUM+2: //Terrorbyte
 			case MAX_GARAGE_NUM+3: //Kosatka
 			case 14: return 1;
-		    case 31: return 2;
+			case 31: return 2;
 			case MAX_GARAGE_NUM+1: return 3; //Nightclub B1
 			case 11: return 8;
 			case 6:
@@ -92,6 +95,10 @@ namespace big
 			case 12:
 			case 26: return 20;
 			case 29: return 50;
+			// mansions
+			case 33:
+			case 34:
+			case 35: return 20;
 		}
 		return -1;
 	}
@@ -131,13 +138,16 @@ namespace big
 			case 27: stat = self::char_index ? "MP1_MULTI_PROPERTY_8"_J : "MP0_MULTI_PROPERTY_8"_J; break;
 			case 28: stat = self::char_index ? "MP1_MULTI_PROPERTY_9"_J : "MP0_MULTI_PROPERTY_9"_J; break;
 			case 29: stat = self::char_index ? "MP1_MULTSTOREY_GAR_OWNED"_J : "MP0_MULTSTOREY_GAR_OWNED"_J; break;
-		    case 31: stat = self::char_index ? "MP1_PROP_BAIL_OFFICE"_J : "MP0_PROP_BAIL_OFFICE"_J; break;
-		    case 32: stat = self::char_index ? "MP1_PROP_HACKER_DEN"_J : "MP0_PROP_HACKER_DEN"_J; break;
+			case 31: stat = self::char_index ? "MP1_PROP_BAIL_OFFICE"_J : "MP0_PROP_BAIL_OFFICE"_J; break;
+			case 32: stat = self::char_index ? "MP1_PROP_HACKER_DEN"_J : "MP0_PROP_HACKER_DEN"_J; break;
+			case 33: stat = self::char_index ? "MP1_MANSION_TH_OWNED"_J : "MP0_MANSION_TH_OWNED"_J; break;
+			case 34: stat = self::char_index ? "MP1_MANSION_AJ_OWNED"_J : "MP0_MANSION_AJ_OWNED"_J; break;
+			case 35: stat = self::char_index ? "MP1_MANSION_MD_OWNED"_J : "MP0_MANSION_MD_OWNED"_J; break;
 			case MAX_GARAGE_NUM+0:
 			case MAX_GARAGE_NUM+1:
 			case MAX_GARAGE_NUM+2:
 			case MAX_GARAGE_NUM+3: return 1;
-		    default: return -1;
+			default: return -1;
 		}
 		if (stat == NULL)
 		{
@@ -157,7 +167,7 @@ namespace big
 		{
 			case 12: //Hangar
 			{
-			    auto hangar_id = *scr_globals::gpbd_fm_1.at(self::id, 880).at(260).at(304).as<PINT>();
+				auto hangar_id = *scr_globals::gpbd_fm_1.at(self::id, 880).at(260).at(304).as<PINT>();
 				switch (hangar_id)
 				{
 					case 1: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MP_HANGAR_1"); //LSIA Hangar 1
@@ -170,7 +180,7 @@ namespace big
 			}
 			case 13: //Facility
 			{
-			    auto facility_id = *scr_globals::gpbd_fm_1.at(self::id, 880).at(260).at(311).as<PINT>();
+				auto facility_id = *scr_globals::gpbd_fm_1.at(self::id, 880).at(260).at(311).as<PINT>();
 				switch (facility_id)
 				{
 					case 1: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MP_DBASE_1"); //Grand Senora Desert Facility
@@ -210,6 +220,9 @@ namespace big
 			}
 			case 31: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("BO_GARNAME"); //Bail Office
 			case 32: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("HD_GARNAME"); //Garment Factory
+			case 33: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MG1_GARNAME"); //The Tongva Estate
+			case 34: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MG2_GARNAME"); //Richman Villa
+			case 35: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MG3_GARNAME"); //The Vinewood Residence
 			case MAX_GARAGE_NUM+0: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("GRTRUCK"); //Mobile Operations Center
 			case MAX_GARAGE_NUM+1: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MP_BHUB_GAR0"); //Nightclub B1
 			case MAX_GARAGE_NUM+2: return HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION("MP_BHUB_CLUBT"); //Terrorbyte
@@ -249,8 +262,8 @@ namespace big
 	}
 
 	personal_vehicle::personal_vehicle(int idx, script_global vehicle_idx) :
-	    m_id(idx),
-	    m_vehicle_idx(vehicle_idx)
+		m_id(idx),
+		m_vehicle_idx(vehicle_idx)
 	{
 		m_plate          = m_vehicle_idx.at(1).as<char*>();
 		m_hash           = *m_vehicle_idx.at(66).as<Hash*>();

@@ -63,25 +63,28 @@ namespace big
 		// The session you are trying to join is private. You will need to be invited to join this session.
 		InviteOnly = 22,
 
-		// The session you are trying to join is a different build type.
-		DifferentBuildType = 23,
+		// The session you are trying to join is private and friends only. You must be invited by a friend to join this session.
+		InviteAndFriendsOnly = 23,
 
-		UNK_24 = 24,
+		// The session you are trying to join is a different build type.
+		DifferentBuildType = 24,
+
+		UNK_25 = 25,
 
 		// The session you are trying to join is not using the same content.
-		DifferentContent = 25,
+		DifferentContent = 26,
 
 		// The session you are trying to join is friends only.
-		FriendsOnly = 26,
+		FriendsOnly = 27,
 
 		// Unable to join this session, your account has a bad reputation.
-		BadReputation = 27,
+		BadReputation = 28,
 
 		// Unable to connect to session. The session may no longer exist.
-		MayNotExist = 28,
+		MayNotExist = 29,
 
 		// Unable to Join. The session you are trying to join is a Premium Race. Joining and accepting invites is disabled for this mode.
-		PremiumRace = 29
+		PremiumRace = 30
 	};
 
 	inline block_join_reason_t& operator++(block_join_reason_t& reason)
@@ -122,12 +125,13 @@ namespace big
 	    "Cheaters Only",            // 20
 	    "Session No Longer Exists", // 21
 	    "Invite Only",              // 22
-	    "Different Build Type",     // 23
-	    "",                         // 24
-	    "Different Content",        // 25
-	    "Friends Only",             // 26
-	    "Bad Reputation",           // 27
-	    "May Not Exist",            // 28
-	    "Premium Race"              // 29
+	    "Invite And Friends Only",  // 23
+	    "Different Build Type",     // 24
+	    "",                         // 25
+	    "Different Content",        // 26
+	    "Friends Only",             // 27
+	    "Bad Reputation",           // 28
+	    "May Not Exist",            // 29
+	    "Premium Race"              // 30
 	});
 }

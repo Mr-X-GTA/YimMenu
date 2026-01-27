@@ -62,7 +62,7 @@ namespace big
 
 		components::button("COPY_SESSION_INFO"_T, [] {
 			char buf[0x100]{};
-			g_pointers->m_gta.m_encode_session_info(&gta_util::get_network()->m_last_joined_session.m_session_info, buf, 0xA9, nullptr);
+			g_pointers->m_gta.m_encode_session_info(&gta_util::get_network()->m_last_joined_session, buf, 0xA9, nullptr);
 			ImGui::SetClipboardText(buf);
 		});
 
