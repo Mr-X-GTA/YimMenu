@@ -113,6 +113,29 @@ namespace big
 			            script::get_current()->yield();
 			            PED::SET_PED_INTO_VEHICLE(PLAYER::PLAYER_PED_ID(), v, -1);
 		            }},
+				{"TPTO WP",
+					[this] {
+						if (HUD::DOES_BLIP_EXIST(HUD::GET_FIRST_BLIP_INFO_ID(8)))
+						{
+							Vector3 coords = HUD::GET_BLIP_INFO_ID_COORD(HUD::GET_FIRST_BLIP_INFO_ID(8));
+							if (entity::take_control_of(m_handle))
+							{
+								float ground_z;
+								MISC::GET_GROUND_Z_FOR_3D_COORD(coords.x, coords.y, 1000.f, &ground_z, FALSE, FALSE);
+								ENTITY::SET_ENTITY_VELOCITY(m_handle, 0.f, 0.f, 0.f);
+								ENTITY::SET_ENTITY_COORDS(m_handle, coords.x, coords.y, ground_z + 1.f, FALSE, FALSE, FALSE, FALSE);								
+								g_notification_service.push("Context Menu", "Vehicle teleported to waypoint.");
+							}
+							else
+							{
+								g_notification_service.push_warning("WARNING"_T.data(), "VEHICLE_FAILED_CONTROL"_T.data());
+							}
+						}
+						else
+						{
+							g_notification_service.push_error("Context Menu", "No waypoint set.");
+						}
+					}},
 		        {"BOOST",
 		            [this] {
 			            if (entity::take_control_of(m_handle))
