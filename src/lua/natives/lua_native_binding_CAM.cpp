@@ -409,6 +409,16 @@ namespace lua::native
 		return retval;
 	}
 
+	static void LUA_NATIVE_CAM_INTERPOLATE_CAM_WITH_PARAMS_(Cam camera, float camPosX, float camPosY, float camPosZ, float camRotX, float camRotY, float camRotZ, float fov, int duration, int posCurveType, int rotCurveType, int rotOrder, int fovCurveType)
+	{
+		CAM::_INTERPOLATE_CAM_WITH_PARAMS(camera, camPosX, camPosY, camPosZ, camRotX, camRotY, camRotZ, fov, duration, posCurveType, rotCurveType, rotOrder, fovCurveType);
+	}
+
+	static void LUA_NATIVE_CAM_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE_(Cam camTo, Cam camFrom, int duration, int easeLocation, int easeRotation, int easeFov)
+	{
+		CAM::_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE(camTo, camFrom, duration, easeLocation, easeRotation, easeFov);
+	}
+
 	static void LUA_NATIVE_CAM_SET_CAM_ACTIVE_WITH_INTERP(Cam camTo, Cam camFrom, int duration, int easeLocation, int easeRotation)
 	{
 		CAM::SET_CAM_ACTIVE_WITH_INTERP(camTo, camFrom, duration, easeLocation, easeRotation);
@@ -1398,6 +1408,8 @@ namespace lua::native
 		CAM.set_function("OVERRIDE_CAM_SPLINE_MOTION_BLUR", LUA_NATIVE_CAM_OVERRIDE_CAM_SPLINE_MOTION_BLUR);
 		CAM.set_function("SET_CAM_SPLINE_NODE_EXTRA_FLAGS", LUA_NATIVE_CAM_SET_CAM_SPLINE_NODE_EXTRA_FLAGS);
 		CAM.set_function("IS_CAM_SPLINE_PAUSED", LUA_NATIVE_CAM_IS_CAM_SPLINE_PAUSED);
+		CAM.set_function("INTERPOLATE_CAM_WITH_PARAMS_", LUA_NATIVE_CAM_INTERPOLATE_CAM_WITH_PARAMS_);
+		CAM.set_function("ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE_", LUA_NATIVE_CAM_ACTIVATE_CAM_WITH_INTERP_AND_FOV_CURVE_);
 		CAM.set_function("SET_CAM_ACTIVE_WITH_INTERP", LUA_NATIVE_CAM_SET_CAM_ACTIVE_WITH_INTERP);
 		CAM.set_function("IS_CAM_INTERPOLATING", LUA_NATIVE_CAM_IS_CAM_INTERPOLATING);
 		CAM.set_function("SHAKE_CAM", LUA_NATIVE_CAM_SHAKE_CAM);

@@ -371,14 +371,14 @@ namespace lua::native
 		STATS::PLAYSTATS_BACKGROUND_SCRIPT_ACTION(action.is<const char*>() ? action.as<const char*>() : nullptr, value);
 	}
 
-	static void LUA_NATIVE_STATS_PLAYSTATS_FLOW_LOW_(float posX, float posY, float posZ, sol::stack_object p3, Any p4, int amount)
+	static void LUA_NATIVE_STATS_PLAYSTATS_FLOW_LOW_(float posX, float posY, float posZ, sol::stack_object action, bool p4, int p5)
 	{
-		STATS::_PLAYSTATS_FLOW_LOW(posX, posY, posZ, p3.is<const char*>() ? p3.as<const char*>() : nullptr, p4, amount);
+		STATS::_PLAYSTATS_FLOW_LOW(posX, posY, posZ, action.is<const char*>() ? action.as<const char*>() : nullptr, p4, p5);
 	}
 
-	static void LUA_NATIVE_STATS_PLAYSTATS_FLOW_MEDIUM_(float x, float y, float z, sol::stack_object interiorAction, int p4, Hash p5)
+	static void LUA_NATIVE_STATS_PLAYSTATS_FLOW_MEDIUM_(float posX, float posY, float posZ, sol::stack_object action, bool p4, int p5)
 	{
-		STATS::_PLAYSTATS_FLOW_MEDIUM(x, y, z, interiorAction.is<const char*>() ? interiorAction.as<const char*>() : nullptr, p4, p5);
+		STATS::_PLAYSTATS_FLOW_MEDIUM(posX, posY, posZ, action.is<const char*>() ? action.as<const char*>() : nullptr, p4, p5);
 	}
 
 	static void LUA_NATIVE_STATS_PLAYSTATS_NPC_INVITE(sol::stack_object p0)
@@ -654,6 +654,11 @@ namespace lua::native
 	static void LUA_NATIVE_STATS_PLAYSTATS_PIMENU_HIDE_OPTIONS(uintptr_t data)
 	{
 		STATS::PLAYSTATS_PIMENU_HIDE_OPTIONS((Any*)data);
+	}
+
+	static void LUA_NATIVE_STATS_PLAYSTATS_NAMED_USER_CONTENT_(bool isBoss, int bossType, int bossId1, int bossId2, int textType, sol::stack_object textString, int textSource)
+	{
+		STATS::_PLAYSTATS_NAMED_USER_CONTENT(isBoss, bossType, bossId1, bossId2, textType, textString.is<const char*>() ? textString.as<const char*>() : nullptr, textSource);
 	}
 
 	static int LUA_NATIVE_STATS_LEADERBOARDS_GET_NUMBER_OF_COLUMNS(int p0, Any p1)
@@ -1757,6 +1762,16 @@ namespace lua::native
 		STATS::_PLAYSTATS_SHOWROOM_OVERVIEW((Any*)data);
 	}
 
+	static void LUA_NATIVE_STATS_PLAYSTATS_PIMENU_NAV_(uintptr_t data)
+	{
+		STATS::_PLAYSTATS_PIMENU_NAV((Any*)data);
+	}
+
+	static void LUA_NATIVE_STATS_PLAYSTATS_RECOVER_VEHICLE_(uintptr_t data)
+	{
+		STATS::_PLAYSTATS_RECOVER_VEHICLE((Any*)data);
+	}
+
 	void init_native_binding_STATS(sol::state& L)
 	{
 		auto STATS = L["STATS"].get_or_create<sol::table>();
@@ -1876,6 +1891,7 @@ namespace lua::native
 		STATS.set_function("PLAYSTATS_FM_EVENT_COMPETITIVEURBANWARFARE", LUA_NATIVE_STATS_PLAYSTATS_FM_EVENT_COMPETITIVEURBANWARFARE);
 		STATS.set_function("PLAYSTATS_FM_EVENT_HUNTBEAST", LUA_NATIVE_STATS_PLAYSTATS_FM_EVENT_HUNTBEAST);
 		STATS.set_function("PLAYSTATS_PIMENU_HIDE_OPTIONS", LUA_NATIVE_STATS_PLAYSTATS_PIMENU_HIDE_OPTIONS);
+		STATS.set_function("PLAYSTATS_NAMED_USER_CONTENT_", LUA_NATIVE_STATS_PLAYSTATS_NAMED_USER_CONTENT_);
 		STATS.set_function("LEADERBOARDS_GET_NUMBER_OF_COLUMNS", LUA_NATIVE_STATS_LEADERBOARDS_GET_NUMBER_OF_COLUMNS);
 		STATS.set_function("LEADERBOARDS_GET_COLUMN_ID", LUA_NATIVE_STATS_LEADERBOARDS_GET_COLUMN_ID);
 		STATS.set_function("LEADERBOARDS_GET_COLUMN_TYPE", LUA_NATIVE_STATS_LEADERBOARDS_GET_COLUMN_TYPE);
@@ -2083,5 +2099,7 @@ namespace lua::native
 		STATS.set_function("PLAYSTATS_ATTRITION_STAGE_END_", LUA_NATIVE_STATS_PLAYSTATS_ATTRITION_STAGE_END_);
 		STATS.set_function("PLAYSTATS_SHOWROOM_NAV_", LUA_NATIVE_STATS_PLAYSTATS_SHOWROOM_NAV_);
 		STATS.set_function("PLAYSTATS_SHOWROOM_OVERVIEW_", LUA_NATIVE_STATS_PLAYSTATS_SHOWROOM_OVERVIEW_);
+		STATS.set_function("PLAYSTATS_PIMENU_NAV_", LUA_NATIVE_STATS_PLAYSTATS_PIMENU_NAV_);
+		STATS.set_function("PLAYSTATS_RECOVER_VEHICLE_", LUA_NATIVE_STATS_PLAYSTATS_RECOVER_VEHICLE_);
 	}
 }

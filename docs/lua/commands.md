@@ -849,6 +849,7 @@ Arg Count:  0
  Toggles the command executor window 
 Arg Count:  0
 
-### resetweaps
- Resets your weapon loadout to default.
-Arg Count: 0
+### resetweaps 
+ Resets your weapon loadout to default. 
+Arg Count:  0
+

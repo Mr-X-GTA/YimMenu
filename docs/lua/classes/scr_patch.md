@@ -1,7 +1,5 @@
 # Class: scr_patch
 
-Class for patching GTA script functions.
-
 ## Constructors (1)
 
 ### `new(script_name, patch_name, pattern, offset, patch_)`
@@ -17,7 +15,7 @@ Adds a patch for the specified script.
 
 **Example Usage:**
 ```lua
-my_patch = scr_patch:new(script_name, patch_name, pattern, offset, patch_)
+myInstance = scr_patch:new(script_name, patch_name, pattern, offset, patch_)
 ```
 
 ## Functions (2)
@@ -39,3 +37,5 @@ Disables the script patch for the current instance.
 ```lua
 scr_patch:disable()
 ```
+
+
