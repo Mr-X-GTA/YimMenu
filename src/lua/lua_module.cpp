@@ -167,7 +167,7 @@ namespace big
 	{
 		const auto config_path = g_lua_manager->get_scripts_config_folder().get_path() / m_module_name;
 		if (!std::filesystem::exists(config_path))
-			std::filesystem::create_directories(config_path);
+			std::filesystem::create_directory(config_path);
 
 		return config_path;
 	}
@@ -213,12 +213,26 @@ namespace big
 		sandbox_os["date"]     = os["date"];
 		sandbox_os["difftime"] = os["difftime"];
 		sandbox_os["time"]     = os["time"];
+		
+		// Lua API: Function
+		// Table: os
+		// Name: rename
+		// Param: oldname: string
+		// Param: newname: string
+		// Returns: boolean, optional<string>: True if the file was successfully renamed, false and an error message otherwise.
 		sandbox_os["rename"]   = [this](const std::string& oldname, const std::string& newname) -> sol::object {
 			const auto old_path = make_absolute(get_config_folder(), oldname);
 			const auto new_path = make_absolute(get_config_folder(), newname);
-			if (!old_path || !new_path) // I'm too lazy to make separate error messages
+			if (!old_path)
 			{
-				return sol::make_object(m_state, std::make_tuple(false, "invalid path"));
+				LOG(WARNING) << "os.rename is restricted to the script's config folder, and the filename provided (" << oldname << ") seems to be outside of it.";
+				return sol::make_object(m_state, std::make_tuple(false, "File not found."));
+			}
+
+			if (!new_path)
+			{
+				LOG(WARNING) << "os.rename is restricted to the script's config folder, and the filename provided (" << newname << ") seems to be outside of it.";
+				return sol::make_object(m_state, std::make_tuple(false, "New file name is invalid."));
 			}
 
 			try
