@@ -194,11 +194,14 @@ namespace big
 
 	static std::optional<std::filesystem::path> make_absolute(const std::filesystem::path& root, const std::filesystem::path& user_path)
 	{
-		auto final_path = std::filesystem::weakly_canonical(root / user_path);
+		if (user_path.is_absolute())
+			return std::nullopt;
 
-		auto [root_end, nothing] = std::mismatch(root.begin(), root.end(), final_path.begin());
+		auto canon_root          = std::filesystem::weakly_canonical(root);
+		auto final_path          = std::filesystem::weakly_canonical(canon_root / user_path);
+		auto [root_end, nothing] = std::mismatch(canon_root.begin(), canon_root.end(), final_path.begin());
 
-		if (root_end != root.end())
+		if (root_end != canon_root.end())
 			return std::nullopt;
 
 		return final_path;
@@ -219,10 +222,11 @@ namespace big
 		// Name: rename
 		// Param: oldname: string
 		// Param: newname: string
-		// Returns: boolean, optional<string>: True if the file was successfully renamed, false and an error message otherwise.
+		// Returns: boolean, string?: True if the file was successfully renamed, false and an error message otherwise.
 		sandbox_os["rename"]   = [this](const std::string& oldname, const std::string& newname) -> sol::object {
 			const auto old_path = make_absolute(get_config_folder(), oldname);
 			const auto new_path = make_absolute(get_config_folder(), newname);
+
 			if (!old_path)
 			{
 				LOG(WARNING) << "os.rename is restricted to the script's config folder, and the filename provided (" << oldname << ") seems to be outside of it.";
@@ -242,7 +246,7 @@ namespace big
 			}
 			catch (const std::exception& e)
 			{
-				return sol::make_object(m_state, std::make_tuple(sol::lua_nil, e.what()));
+				return sol::make_object(m_state, std::make_tuple(false, e.what()));
 			}
 		};
 
