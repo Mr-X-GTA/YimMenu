@@ -3,7 +3,7 @@
 #include "gta_pointers_layout_info.hpp"
 #include "sc_pointers_layout_info.hpp"
 
-#define GTA_VERSION_TARGET "1.72-3751.0"
+#define GTA_VERSION_TARGET "1.72-3788.0"
 
 namespace big
 {
@@ -61,10 +61,10 @@ namespace big
         // Game State
         {
             "GS",
-            "83 3D ? ? ? ? ? 75 17 8B 43 20 25",
+            "81 39 5D 6D FF AF 75 20",
             [](memory::handle ptr)
             {
-                g_pointers->m_gta.m_game_state = ptr.add(2).rip().add(1).as<eGameState*>();
+                g_pointers->m_gta.m_game_state = ptr.add(10).rip().add(1).as<eGameState*>();
             }
         },
         // Is Session Started
@@ -316,7 +316,7 @@ namespace big
         // Handle To Ptr
         {
             "GSH",
-            "83 F9 FF 74 31 4C 8B 0D",
+            "83 F9 FF 74 37 8B D1",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_handle_to_ptr = ptr.as<decltype(gta_pointers::m_handle_to_ptr)>();
@@ -1535,10 +1535,10 @@ namespace big
         // Blip List
         {
             "BLPLST",
-            "4C 8D 05 ? ? ? ? 0F B7 C1",
+            "4D 8B 04 C0 4D 85 C0 74 0A",
             [](memory::handle ptr)
             {
-                g_pointers->m_gta.m_blip_list = ptr.add(3).rip().as<CBlipList*>();
+                g_pointers->m_gta.m_blip_list = ptr.sub(4).rip().as<CBlipList*>();
             }
         },
         // TimecycleKeyframeData
