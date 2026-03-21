@@ -8,21 +8,27 @@ namespace big
 	{
 		for (auto mode = skeleton->m_update_modes; mode; mode = mode->m_next)
 		{
-			if (mode && mode->m_type == type)
+			if (mode->m_type != type)
+				continue;
+
+			for (auto group = mode->m_head; group; group = group->m_next)
 			{
-				for (auto group = mode->m_head; group; group = group->m_next)
+				if (group->m_hash != "Common Main"_J)
 				{
-					for (auto item = static_cast<rage::game_skeleton_update_group*>(group)->m_head; item; item = item->m_next)
-					{
-						if (item->m_hash != 0xA0F39FB6 && item->m_hash != "TamperActions"_J)
-						{
-							item->run();
-						}
-					}
+					group->run();
+					continue;
 				}
 
-				break;
+				for (auto item = static_cast<rage::game_skeleton_update_group*>(group)->m_head; item; item = item->m_next)
+				{
+					if (item->m_hash != 0xA0F39FB6 && item->m_hash != "TamperActions"_J)
+					{
+						item->run();
+					}
+				}
 			}
+
+			break;
 		}
 	}
 }
