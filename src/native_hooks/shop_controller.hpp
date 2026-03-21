@@ -87,7 +87,7 @@ namespace big
 			if (g.self.free_shopping && result)
 				STATS::STAT_SAVE(0, 0, 3, 0);
 
-			src->set_return_value<BOOL>(result);
+			src->set_return_value<BOOL>(std::move(result));
 		}
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
