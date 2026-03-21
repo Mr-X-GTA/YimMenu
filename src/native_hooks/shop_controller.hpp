@@ -17,6 +17,44 @@ namespace big
 			return formatted;
 		}
 
+		// Balance stat hashes that shop_controller checks to decide if you can afford something.
+		// We return INT32_MAX for all of them when free_shopping is on so the script never
+		// shows "Not enough money" and always fires the REAL server transaction — which is
+		// what actually records ownership (penthouse, garage, etc.) on Rockstar's backend.
+		// The actual money deduction is blocked separately by the NETWORK_BUY_*/NETWORK_DEDUCT_CASH hooks.
+		static constexpr std::array<Hash, 6> sc_balance_stats = {
+			"MP0_CHAR_BANK_BALANCE_0"_J,
+			"MP1_CHAR_BANK_BALANCE_0"_J,
+			"MP0_WALLET_BALANCE"_J,
+			"MP1_WALLET_BALANCE"_J,
+			"BANK_BALANCE"_J,
+			"WALLET_BALANCE"_J,
+		};
+
+		void STAT_GET_INT(rage::scrNativeCallContext* src)
+		{
+			const auto stat_hash = src->get_arg<Hash>(0);
+			auto* out            = src->get_arg<int*>(1);
+			const auto p2        = src->get_arg<int>(2);
+
+			BOOL result = STATS::STAT_GET_INT(stat_hash, out, p2);
+
+			// Spoof balance stats to INT32_MAX so the script always thinks you can afford anything.
+			if (g.self.free_shopping && out)
+			{
+				for (const auto& h : sc_balance_stats)
+				{
+					if (stat_hash == h)
+					{
+						*out = INT32_MAX;
+						break;
+					}
+				}
+			}
+
+			src->set_return_value<BOOL>(std::move(result));
+		}
+
 		void SET_WARNING_MESSAGE_WITH_HEADER(rage::scrNativeCallContext* src)
 		{
 			HUD::SET_WARNING_MESSAGE_WITH_HEADER(src->get_arg<const char*>(0), src->get_arg<const char*>(1), src->get_arg<int>(2), src->get_arg<const char*>(3), src->get_arg<BOOL>(4), src->get_arg<Any>(5), src->get_arg<Any*>(6), src->get_arg<Any*>(7), src->get_arg<BOOL>(8), src->get_arg<Any>(9));
