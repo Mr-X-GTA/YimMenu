@@ -115,17 +115,9 @@ namespace big
 			auto flags = src->get_arg<int>(5);
 
 			if (g.self.free_shopping)
-			{
 				value = 0;
-			}
 
-			BOOL result = NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags);
-
-			// Force a cloud save so the server records ownership and it persists after reloading.
-			if (g.self.free_shopping && result)
-				STATS::STAT_SAVE(0, 0, 3, 0);
-
-			src->set_return_value<BOOL>(std::move(result));
+			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
 		}
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
