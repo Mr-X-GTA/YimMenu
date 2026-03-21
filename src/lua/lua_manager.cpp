@@ -1,4 +1,4 @@
-#include "lua_manager.hpp"
+﻿#include "lua_manager.hpp"
 
 #include "file_manager.hpp"
 
@@ -308,6 +308,34 @@ namespace big
 		});
 	}
 
+	static inline bool validate_module_name(const std::string& name)
+	{
+		if (name.empty())
+		{
+			return false;
+		}
+
+		if (name == "." || name == "..")
+		{
+			return false;
+		}
+
+		if (name.find("/") != std::string::npos || name.find("\\") != std::string::npos || name.find(":") != std::string::npos || name.find("..") != std::string::npos)
+		{
+			return false;
+		}
+
+		for (unsigned char c : name)
+		{
+			if (std::iscntrl(c))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	std::weak_ptr<lua_module> lua_manager::load_module(const std::filesystem::path& module_path)
 	{
 		if (!std::filesystem::exists(module_path))
@@ -321,7 +349,13 @@ namespace big
 			return {};
 
 		const auto module_name = module_path.filename().string();
-		const auto id          = rage::joaat(module_name);
+		if (!validate_module_name(module_name))
+		{
+			LOG(WARNING) << "Module " << module_name << " was not loaded. File name contains illegal characters.";
+			return {};
+		}
+
+		const auto id = rage::joaat(module_name);
 
 		std::lock_guard guard(m_module_lock);
 		for (const auto& module : m_modules)
