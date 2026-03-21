@@ -109,6 +109,7 @@ namespace big
 		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_ITEM_KEY_IS_VALID);
 		add_native_detour(NativeIndex::NET_GAMESERVER_CATALOG_IS_VALID, shop_controller::NET_GAMESERVER_CATALOG_IS_VALID);
 		add_native_detour(NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, shop_controller::NET_GAMESERVER_BEGIN_SERVICE);
+		add_native_detour(NativeIndex::NET_GAMESERVER_USE_SERVER_TRANSACTIONS, shop_controller::NET_GAMESERVER_USE_SERVER_TRANSACTIONS);
 		add_native_detour(NativeIndex::NET_GAMESERVER_GET_CATALOG_CLOUD_CRC, shop_controller::NET_GAMESERVER_GET_CATALOG_CLOUD_CRC);
 		add_native_detour(NativeIndex::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS, shop_controller::NET_GAMESERVER_RETRIEVE_INIT_SESSION_STATUS);
 		add_native_detour(NativeIndex::NET_GAMESERVER_START_SESSION, shop_controller::NET_GAMESERVER_START_SESSION);
