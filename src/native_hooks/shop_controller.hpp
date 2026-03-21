@@ -81,7 +81,13 @@ namespace big
 				value = 0;
 			}
 
-			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags));
+			BOOL result = NETSHOPPING::NET_GAMESERVER_BEGIN_SERVICE(transactionId, categoryHash, itemHash, actionTypeHash, value, flags);
+
+			// Force a cloud save so the server records ownership and it persists after reloading.
+			if (g.self.free_shopping && result)
+				STATS::STAT_SAVE(0, 0, 3, 0);
+
+			src->set_return_value<BOOL>(result);
 		}
 
 		void NET_GAMESERVER_USE_SERVER_TRANSACTIONS(rage::scrNativeCallContext *src)
@@ -1093,6 +1099,36 @@ namespace big
 			auto p5 = src->get_arg<Any>(5);
 			auto p6 = src->get_arg<Any>(6);
 			src->set_return_value<BOOL>(MONEY::NETWORK_CAN_SPEND_MONEY2(p0, p1, p2, p3, p4, p5, p6));
+		}
+
+		void NETWORK_GET_CAN_SPEND_FROM_WALLET(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(MONEY::NETWORK_GET_CAN_SPEND_FROM_WALLET(src->get_arg<int>(0), src->get_arg<int>(1)));
+		}
+
+		void NETWORK_GET_CAN_SPEND_FROM_BANK(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(MONEY::NETWORK_GET_CAN_SPEND_FROM_BANK(src->get_arg<int>(0)));
+		}
+
+		void NETWORK_GET_CAN_SPEND_FROM_BANK_AND_WALLET(rage::scrNativeCallContext* src)
+		{
+			if (g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+			src->set_return_value<BOOL>(MONEY::NETWORK_GET_CAN_SPEND_FROM_BANK_AND_WALLET(src->get_arg<int>(0), src->get_arg<int>(1)));
 		}
 	}
 }
