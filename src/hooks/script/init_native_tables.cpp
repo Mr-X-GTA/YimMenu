@@ -1,6 +1,7 @@
 #include "hooking/hooking.hpp"
 #include "native_hooks/native_hooks.hpp"
 #include "services/script_patcher/script_patcher_service.hpp"
+#include "services/script_function_hook/script_function_hook_service.hpp"
 
 namespace big
 {
@@ -12,6 +13,7 @@ namespace big
 		{
 			g_script_patcher_service->on_script_load(program);
 			g_native_hooks->hook_program(program);
+			g_script_function_hook_service->resolve_hooks(program);
 		}
 
 		return ret;

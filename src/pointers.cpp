@@ -1970,6 +1970,15 @@ namespace big
             {
                 g_pointers->m_gta.m_game_skeleton_update = ptr.as<PVOID>();
             }
+        },
+        // Script VM On Enter End
+        {
+            "SVMOEE",
+            "E9 ? ? ? ? 44 0F B6 4F ? 44 0F B6 47",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_script_vm_on_enter_end = ptr.as<PVOID>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

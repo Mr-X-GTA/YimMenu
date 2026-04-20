@@ -5,6 +5,7 @@
 #include "memory/pattern.hpp"
 #include "pointers.hpp"
 #include "util/scripts.hpp"
+#include "services/script_function_hook/script_function_hook_service.hpp"
 
 namespace lua::scr_function
 {
@@ -351,10 +352,149 @@ namespace lua::scr_function
 		}
 	}
 
+	// Lua API: Class
+	// Name: scr_value_wrapper
+	// Class for wrapping arguments and return values of GTA script functions, used by add_script_function_hook.
+	class scr_value_wrapper_t
+	{
+		rage::scrValue* m_data;
+
+	public:
+		scr_value_wrapper_t(rage::scrValue* data) :
+		    m_data(data)
+		{
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_int
+		// Param: index: int: The index to access.
+		// Returns: int: The current value.
+		// Get the int value currently contained by the wrapper.
+		int get_int(int index)
+		{
+			return m_data[index].Int;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: set_int
+		// Param: index: int: The index to access.
+		// Param: value: int: The new value.
+		// Set the int value contained by the wrapper.
+		void set_int(int index, int value)
+		{
+			m_data[index].Int = value;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_float
+		// Param: index: int: The index to access.
+		// Returns: float: The current value.
+		// Get the float value currently contained by the wrapper.
+		float get_float(int index)
+		{
+			return m_data[index].Float;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: set_float
+		// Param: index: int: The index to access.
+		// Param: value: float: The new value.
+		// Set the float value contained by the wrapper.
+		void set_float(int index, float value)
+		{
+			m_data[index].Float = value;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_string
+		// Param: index: int: The index to access.
+		// Returns: string: The current value.
+		// Get the string value currently contained by the wrapper.
+		const char* get_string(int index)
+		{
+			return m_data[index].String;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: set_string
+		// Param: index: int: The index to access.
+		// Param: value: string: The new value.
+		// Set the string value contained by the wrapper.
+		void set_string(int index, const char* value)
+		{
+			m_data[index].String = value;
+		}
+	};
+
+	// Lua API: function
+	// Table: scr_function
+	// Name: add_script_function_hook
+	// Param: script_name: string: Name of the script.
+	// Param: hook_name: string: Name of the hook. This parameter needs to be unique.
+	// Param: pattern: string: Pattern to scan for within the script.
+	// Param: hook_func: function: The callback function. It receives args and rets, which can be read or set via `get/set_int/float/string` methods. Return value determines whether to skip or execute the original function.
+	// Hooks a script function. If the callback returns `false`, the original function is skipped, and values in `rets` are pushed to the stack. If `true`, the original function executes normally.
+	// **Example Usage:**
+	// ```lua
+	// scr_function.add_script_function_hook("some_script", "my_hook", "2D 00 ? ? 00 61", function(args, rets)
+	//   local val = args:get_int(0)
+	//   if val == 1 then
+	//     rets:set_int(0, 100)
+	//     return false
+	//   end
+	//   return true
+	// end)
+	// ```
+	static void add_script_function_hook(const std::string& script_name, const std::string& hook_name, const std::string& pattern, sol::protected_function hook_func)
+	{
+		big::g_script_function_hook_service->add_hook(rage::joaat(script_name), hook_name, pattern, [hook_func](rage::scrValue* args, rage::scrValue* rets) -> bool {
+			scr_value_wrapper_t lua_args(args);
+			scr_value_wrapper_t lua_rets(rets);
+
+			auto result = hook_func(lua_args, lua_rets);
+			if (!result.valid())
+				return true; // don't skip the original if lua fails
+
+			return result.get<bool>();
+		});
+	}
+
+     // Lua API: function
+	// Table: scr_function
+	// Name: remove_script_function_hook
+	// Param: script_name: string: Name of the script associated with the hook.
+	// Param: hook_name: string: The unique name provided during add_script_function_hook.
+	// Removes an existing script function hook.
+	// **Example Usage:**
+	// ```lua
+	// scr_function.remove_script_function_hook("some_script", "my_hook")
+	// ```
+    static void remove_script_function_hook(const std::string& script_name, const std::string& hook_name)
+	{
+        big::g_script_function_hook_service->remove_hook(rage::joaat(script_name), hook_name);
+	}
+
 	void bind(sol::state& state)
 	{
+		auto ut = state.new_usertype<scr_value_wrapper_t>("scr_value_wrapper");
+
+		ut["get_int"]    = &scr_value_wrapper_t::get_int;
+		ut["set_int"]    = &scr_value_wrapper_t::set_int;
+		ut["get_float"]  = &scr_value_wrapper_t::get_float;
+		ut["set_float"]  = &scr_value_wrapper_t::set_float;
+		ut["get_string"] = &scr_value_wrapper_t::get_string;
+		ut["set_string"] = &scr_value_wrapper_t::set_string;
+
 		auto ns = state["scr_function"].get_or_create<sol::table>();
 
-		ns["call_script_function"] = sol::overload(call_script_function_by_signature, call_script_function_by_instruction_pointer);
+		ns["call_script_function"]        = sol::overload(call_script_function_by_signature, call_script_function_by_instruction_pointer);
+        ns["add_script_function_hook"]    = add_script_function_hook;
+		ns["remove_script_function_hook"] = remove_script_function_hook;
 	}
 }

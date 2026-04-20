@@ -310,4 +310,85 @@ namespace big::scripts
 
 		SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(hash);
 	}
+
+	inline std::uint32_t get_insn_size(rage::scrProgram* program, std::uint32_t index)
+	{
+		if (!program || !program->m_code_blocks)
+			return 1;
+
+		auto code = program->get_code_address(index);
+
+		switch (static_cast<scrOpcode>(*code))
+		{
+		case scrOpcode::PUSH_CONST_U8:
+		case scrOpcode::ARRAY_U8:
+		case scrOpcode::ARRAY_U8_LOAD:
+		case scrOpcode::ARRAY_U8_STORE:
+		case scrOpcode::LOCAL_U8:
+		case scrOpcode::LOCAL_U8_LOAD:
+		case scrOpcode::LOCAL_U8_STORE:
+		case scrOpcode::STATIC_U8:
+		case scrOpcode::STATIC_U8_LOAD:
+		case scrOpcode::STATIC_U8_STORE:
+		case scrOpcode::IADD_U8:
+		case scrOpcode::IMUL_U8:
+		case scrOpcode::IOFFSET_U8:
+		case scrOpcode::IOFFSET_U8_LOAD:
+		case scrOpcode::IOFFSET_U8_STORE:
+		case scrOpcode::TEXT_LABEL_ASSIGN_STRING:
+		case scrOpcode::TEXT_LABEL_ASSIGN_INT:
+		case scrOpcode::TEXT_LABEL_APPEND_STRING:
+		case scrOpcode::TEXT_LABEL_APPEND_INT:
+			return 2;
+		case scrOpcode::PUSH_CONST_U8_U8:
+		case scrOpcode::LEAVE:
+		case scrOpcode::PUSH_CONST_S16:
+		case scrOpcode::IADD_S16:
+		case scrOpcode::IMUL_S16:
+		case scrOpcode::IOFFSET_S16:
+		case scrOpcode::IOFFSET_S16_LOAD:
+		case scrOpcode::IOFFSET_S16_STORE:
+		case scrOpcode::ARRAY_U16:
+		case scrOpcode::ARRAY_U16_LOAD:
+		case scrOpcode::ARRAY_U16_STORE:
+		case scrOpcode::LOCAL_U16:
+		case scrOpcode::LOCAL_U16_LOAD:
+		case scrOpcode::LOCAL_U16_STORE:
+		case scrOpcode::STATIC_U16:
+		case scrOpcode::STATIC_U16_LOAD:
+		case scrOpcode::STATIC_U16_STORE:
+		case scrOpcode::GLOBAL_U16:
+		case scrOpcode::GLOBAL_U16_LOAD:
+		case scrOpcode::GLOBAL_U16_STORE:
+		case scrOpcode::J:
+		case scrOpcode::JZ:
+		case scrOpcode::IEQ_JZ:
+		case scrOpcode::INE_JZ:
+		case scrOpcode::IGT_JZ:
+		case scrOpcode::IGE_JZ:
+		case scrOpcode::ILT_JZ:
+		case scrOpcode::ILE_JZ:
+			return 3;
+		case scrOpcode::PUSH_CONST_U8_U8_U8:
+		case scrOpcode::NATIVE:
+		case scrOpcode::CALL:
+		case scrOpcode::STATIC_U24:
+		case scrOpcode::STATIC_U24_LOAD:
+		case scrOpcode::STATIC_U24_STORE:
+		case scrOpcode::GLOBAL_U24:
+		case scrOpcode::GLOBAL_U24_LOAD:
+		case scrOpcode::GLOBAL_U24_STORE:
+		case scrOpcode::PUSH_CONST_U24:
+			return 4;
+		case scrOpcode::PUSH_CONST_U32:
+		case scrOpcode::PUSH_CONST_F:
+			return 5;
+		case scrOpcode::ENTER:
+			return 5 + code[4];
+		case scrOpcode::SWITCH:
+			return 2 + code[1] * 6;
+		}
+
+		return 1;
+	}
 }
