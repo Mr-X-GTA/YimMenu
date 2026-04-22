@@ -66,7 +66,7 @@ namespace big
 		memory::byte_patch::make(g_pointers->m_gta.m_script_vm_patch_6.add(6).as<uint16_t*>(), 0x9090)->apply();
 
 		// Patch script network check
-		memory::byte_patch::make(g_pointers->m_gta.m_model_spawn_bypass, std::vector{0x90, 0x90})->apply(); // this is no longer integrity checked
+		//memory::byte_patch::make(g_pointers->m_gta.m_model_spawn_bypass, std::vector{0x90, 0x90})->apply(); // this is no longer integrity checked
 
 		// Increase Start Get Presence Attributes limit from 32 to 100
 		memory::byte_patch::make(g_pointers->m_sc.m_num_handles_patch, std::vector{0x64})->apply();
