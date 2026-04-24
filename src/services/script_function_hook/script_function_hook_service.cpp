@@ -38,10 +38,13 @@ namespace big
 		g_script_function_hook_service = nullptr;
 	}
 
-	void script_function_hook_service::process_hook(const function_hook& hook, std::uint8_t*& ip, std::uint8_t*& base, rage::scrValue*& sp, rage::scrValue* fp, std::uint8_t** code)
+	void script_function_hook_service::process_hook(function_hook& hook, std::uint8_t*& ip, std::uint8_t*& base, rage::scrValue*& sp, rage::scrValue* fp, std::uint8_t** code)
 	{
+		// prevent reentrancy in case the hook calls the original function via the script_function class
+		hook.m_active = true;
+
 		rage::scrValue ret_val[256]{};
-		if (!hook.m_hook_func(fp, ret_val))
+		if (!hook.m_hook_func(fp, hook.m_arg_count, ret_val, hook.m_ret_count))
 		{
 			// push return value onto stack
 			for (std::uint32_t i = 0; i < hook.m_ret_count; i++)
@@ -52,20 +55,27 @@ namespace big
 			ip = &code[offset >> 14][offset & 0x3FFF] - 1;
 			base = &ip[-offset];
 		}
+
+		hook.m_active = false;
 	}
 
 	void script_function_hook_service::resolve_hook(function_hook& hook, rage::scrProgram* program)
 	{
-		auto location = scripts::get_code_location_by_pattern(program, memory::pattern(hook.m_pattern));
-		if (!location)
+		std::uint32_t entry_ip = hook.m_start_ip;
+		if (entry_ip == 0)
 		{
-			LOG(FATAL) << "Failed to find pattern " << hook.m_name << " in script " << program->m_name;
-			return;
+			auto location = scripts::get_code_location_by_pattern(program, memory::pattern(hook.m_pattern));
+			if (!location)
+			{
+				LOG(FATAL) << "Failed to find pattern " << hook.m_name << " in script " << program->m_name;
+				return;
+			}
+
+			LOG(VERBOSE) << "Found pattern " << hook.m_name << " at " << HEX_TO_UPPER(*location) << " in script " << program->m_name;
+			entry_ip = *location;
 		}
 
-		LOG(VERBOSE) << "Found pattern " << hook.m_name << " at " << HEX_TO_UPPER(*location) << " in script " << program->m_name;
-
-        std::uint32_t post_enter = *location + scripts::get_insn_size(program, *location);
+        std::uint32_t post_enter = entry_ip + scripts::get_insn_size(program, entry_ip);
 		std::uint32_t pos = post_enter;
 
 		while (pos < program->m_code_size)
@@ -83,6 +93,7 @@ namespace big
 				{
 					hook.m_start_ip = post_enter;
 					hook.m_end_ip = pos;
+					hook.m_arg_count = op[1];
 					hook.m_ret_count = op[2];
 					hook.m_resolved = true;
 					break;
@@ -95,9 +106,9 @@ namespace big
 
 	void script_function_hook_service::process_hooks(std::uint8_t*& ip, std::uint8_t*& base, rage::scrValue*& sp, rage::scrValue* fp, rage::scrThreadContext* ctx, std::uint8_t** code)
 	{
-		for (const auto& hook : m_hooks)
+		for (auto& hook : m_hooks)
 		{
-			if (!hook.m_resolved || hook.m_script != ctx->m_script_hash || hook.m_start_ip != static_cast<std::uint32_t>(ip - base))
+			if (!hook.m_resolved || hook.m_active || hook.m_script != ctx->m_script_hash || hook.m_start_ip != static_cast<std::uint32_t>(ip - base))
 				continue;
 
 			process_hook(hook, ip, base, sp, fp, code);
@@ -128,6 +139,28 @@ namespace big
 		hook.m_script = script;
 		hook.m_name = name;
 		hook.m_pattern = pattern;
+		hook.m_hook_func = hook_func;
+
+		// if the program is already available, set the data now, otherwise we will try in init_native_tables
+		if (auto program = gta_util::find_script_program(script))
+			resolve_hook(hook, program);
+
+		m_hooks.push_back(hook);
+	}
+
+	void script_function_hook_service::add_hook(rage::joaat_t script, const std::string& name, std::uint32_t ip, const hook_func& hook_func)
+	{
+		// prevent duplicates
+		for (const auto& hook : m_hooks)
+		{
+			if (hook.m_script == script && hook.m_name == name)
+				return;
+		}
+
+		function_hook hook{};
+		hook.m_script = script;
+		hook.m_name = name;
+		hook.m_start_ip = ip; // init with entry IP now, we will update it to point to post-enter in resolve_hook
 		hook.m_hook_func = hook_func;
 
 		// if the program is already available, set the data now, otherwise we will try in init_native_tables

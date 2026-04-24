@@ -17,7 +17,7 @@ namespace lua::scr_function
 
 	// Lua API: Table
 	// Name: scr_function
-	// Table for calling GTA script functions. Needs to be called in the fiber pool. Only call the function when necessary.
+	// Table for calling and hooking GTA script functions. Calls must be made in the fiber pool.
 
 	// Lua API: function
 	// Table: scr_function
@@ -352,17 +352,29 @@ namespace lua::scr_function
 		}
 	}
 
-	// Lua API: Class
+    // Lua API: Class
 	// Name: scr_value_wrapper
 	// Class for wrapping arguments and return values of GTA script functions, used by add_script_function_hook.
 	class scr_value_wrapper_t
 	{
 		rage::scrValue* m_data;
+		std::uint32_t m_count;
 
 	public:
-		scr_value_wrapper_t(rage::scrValue* data) :
-		    m_data(data)
+		scr_value_wrapper_t(rage::scrValue* data, std::uint32_t count) :
+		    m_data(data),
+		    m_count(count)
 		{
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_count
+		// Returns: int: The number of elements in the wrapper.
+		// Get the total number of elements in the wrapper.
+		std::uint32_t get_count()
+		{
+			return m_count;
 		}
 
 		// Lua API: Function
@@ -371,9 +383,9 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Returns: int: The current value.
 		// Get the int value currently contained by the wrapper.
-		int get_int(int index)
+		std::int32_t get_int(std::uint32_t index)
 		{
-			return m_data[index].Int;
+			return index < m_count ? m_data[index].Int : 0;
 		}
 
 		// Lua API: Function
@@ -382,9 +394,33 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Param: value: int: The new value.
 		// Set the int value contained by the wrapper.
-		void set_int(int index, int value)
+		void set_int(std::uint32_t index, std::int32_t value)
 		{
-			m_data[index].Int = value;
+			if (index < m_count)
+				m_data[index].Int = value;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_uns
+		// Param: index: int: The index to access.
+		// Returns: int: The current unsigned value.
+		// Get the unsigned int value currently contained by the wrapper.
+		std::uint32_t get_uns(std::uint32_t index)
+		{
+			return index < m_count ? m_data[index].Uns : 0;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: set_uns
+		// Param: index: int: The index to access.
+		// Param: value: int: The new unsigned value.
+		// Set the unsigned int value contained by the wrapper.
+		void set_uns(std::uint32_t index, std::uint32_t value)
+		{
+			if (index < m_count)
+				m_data[index].Uns = value;
 		}
 
 		// Lua API: Function
@@ -393,9 +429,9 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Returns: float: The current value.
 		// Get the float value currently contained by the wrapper.
-		float get_float(int index)
+		float get_float(std::uint32_t index)
 		{
-			return m_data[index].Float;
+			return index < m_count ? m_data[index].Float : 0.0f;
 		}
 
 		// Lua API: Function
@@ -404,9 +440,10 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Param: value: float: The new value.
 		// Set the float value contained by the wrapper.
-		void set_float(int index, float value)
+		void set_float(std::uint32_t index, float value)
 		{
-			m_data[index].Float = value;
+			if (index < m_count)
+				m_data[index].Float = value;
 		}
 
 		// Lua API: Function
@@ -415,9 +452,9 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Returns: string: The current value.
 		// Get the string value currently contained by the wrapper.
-		const char* get_string(int index)
+		const char* get_string(std::uint32_t index)
 		{
-			return m_data[index].String;
+			return index < m_count ? m_data[index].String : nullptr;
 		}
 
 		// Lua API: Function
@@ -426,9 +463,21 @@ namespace lua::scr_function
 		// Param: index: int: The index to access.
 		// Param: value: string: The new value.
 		// Set the string value contained by the wrapper.
-		void set_string(int index, const char* value)
+		void set_string(std::uint32_t index, const char* value)
 		{
-			m_data[index].String = value;
+			if (index < m_count)
+				m_data[index].String = value;
+		}
+
+		// Lua API: Function
+		// Class: scr_value_wrapper
+		// Name: get_reference
+		// Param: index: int: The index to access.
+		// Returns: class: The current value.
+		// Get the reference value currently contained by the wrapper.
+		scr_value_wrapper_t get_reference(std::uint32_t index)
+		{
+			return index < m_count ? scr_value_wrapper_t(m_data[index].Reference, m_count) : scr_value_wrapper_t(nullptr, 0);
 		}
 	};
 
@@ -451,11 +500,11 @@ namespace lua::scr_function
 	//   return true
 	// end)
 	// ```
-	static void add_script_function_hook(const std::string& script_name, const std::string& hook_name, const std::string& pattern, sol::protected_function hook_func)
+	static void add_script_function_hook_by_signature(const std::string& script_name, const std::string& hook_name, const std::string& pattern, sol::protected_function hook_func)
 	{
-		big::g_script_function_hook_service->add_hook(rage::joaat(script_name), hook_name, pattern, [hook_func](rage::scrValue* args, rage::scrValue* rets) -> bool {
-			scr_value_wrapper_t lua_args(args);
-			scr_value_wrapper_t lua_rets(rets);
+		big::g_script_function_hook_service->add_hook(rage::joaat(script_name), hook_name, pattern, [hook_func](rage::scrValue* args, const std::uint32_t argCount, rage::scrValue* rets, const std::uint32_t retCount) -> bool {
+			scr_value_wrapper_t lua_args(args, argCount);
+			scr_value_wrapper_t lua_rets(rets, retCount);
 
 			auto result = hook_func(lua_args, lua_rets);
 			if (!result.valid())
@@ -465,7 +514,40 @@ namespace lua::scr_function
 		});
 	}
 
-     // Lua API: function
+	// Lua API: function
+	// Table: scr_function
+	// Name: add_script_function_hook
+	// Param: script_name: string: Name of the script.
+	// Param: hook_name: string: Name of the hook. This parameter needs to be unique.
+	// Param: instruction_pointer: integer: Position of the function within the script.
+	// Param: hook_func: function: The callback function. It receives args and rets, which can be read or set via `get/set_int/float/string` methods. Return value determines whether to skip or execute the original function.
+	// Hooks a script function directly using the function position. If the callback returns `false`, the original function is skipped, and values in `rets` are pushed to the stack. If `true`, the original function executes normally.
+	// **Example Usage:**
+	// ```lua
+	// scr_function.add_script_function_hook("some_script", "my_hook", 0x10BE, function(args, rets)
+	//   local val = args:get_int(0)
+	//   if val == 1 then
+	//     rets:set_int(0, 100)
+	//     return false
+	//   end
+	//   return true
+	// end)
+	// ```
+	static void add_script_function_hook_by_instruction_pointer(const std::string& script_name, const std::string& hook_name, const std::uint32_t instruction_pointer, sol::protected_function hook_func)
+	{
+		big::g_script_function_hook_service->add_hook(rage::joaat(script_name), hook_name, instruction_pointer, [hook_func](rage::scrValue* args, const std::uint32_t argCount, rage::scrValue* rets, const std::uint32_t retCount) -> bool {
+			scr_value_wrapper_t lua_args(args, argCount);
+			scr_value_wrapper_t lua_rets(rets, retCount);
+
+			auto result = hook_func(lua_args, lua_rets);
+			if (!result.valid())
+				return true; // don't skip the original if lua fails
+
+			return result.get<bool>();
+		});
+	}
+
+    // Lua API: function
 	// Table: scr_function
 	// Name: remove_script_function_hook
 	// Param: script_name: string: Name of the script associated with the hook.
@@ -484,17 +566,21 @@ namespace lua::scr_function
 	{
 		auto ut = state.new_usertype<scr_value_wrapper_t>("scr_value_wrapper");
 
-		ut["get_int"]    = &scr_value_wrapper_t::get_int;
-		ut["set_int"]    = &scr_value_wrapper_t::set_int;
-		ut["get_float"]  = &scr_value_wrapper_t::get_float;
-		ut["set_float"]  = &scr_value_wrapper_t::set_float;
-		ut["get_string"] = &scr_value_wrapper_t::get_string;
-		ut["set_string"] = &scr_value_wrapper_t::set_string;
+        ut["get_count"]     = &scr_value_wrapper_t::get_count;
+		ut["get_int"]       = &scr_value_wrapper_t::get_int;
+		ut["set_int"]       = &scr_value_wrapper_t::set_int;
+		ut["get_uns"]       = &scr_value_wrapper_t::get_uns;
+		ut["set_uns"]       = &scr_value_wrapper_t::set_uns;
+		ut["get_float"]     = &scr_value_wrapper_t::get_float;
+		ut["set_float"]     = &scr_value_wrapper_t::set_float;
+		ut["get_string"]    = &scr_value_wrapper_t::get_string;
+		ut["set_string"]    = &scr_value_wrapper_t::set_string;
+		ut["get_reference"] = &scr_value_wrapper_t::get_reference;
 
 		auto ns = state["scr_function"].get_or_create<sol::table>();
 
 		ns["call_script_function"]        = sol::overload(call_script_function_by_signature, call_script_function_by_instruction_pointer);
-        ns["add_script_function_hook"]    = add_script_function_hook;
+		ns["add_script_function_hook"]    = sol::overload(add_script_function_hook_by_signature, add_script_function_hook_by_instruction_pointer);
 		ns["remove_script_function_hook"] = remove_script_function_hook;
 	}
 }

@@ -28,7 +28,6 @@ script_vm_on_enter_end_handler PROC
     mov [rsp + 20h], r15 ; ctx
     mov [rsp + 28h], r13 ; code
     call process_script_function_hooks
-
     add rsp, 30h
 
     ; restore stuff
