@@ -219,33 +219,37 @@ namespace big
 	{
 		if (g_gui->m_is_open || g_gui->m_override_mouse)
 		{
-			for (uint8_t i = 0; i <= 6; i++)
-				PAD::DISABLE_CONTROL_ACTION(2, i, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 106, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 329, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 330, true);
-
-			PAD::DISABLE_CONTROL_ACTION(2, 14, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 15, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 16, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 17, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 24, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 69, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 70, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 84, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 85, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 99, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 92, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 100, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 114, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 115, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 121, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 142, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 241, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 261, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 257, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 262, true);
-			PAD::DISABLE_CONTROL_ACTION(2, 331, true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_NEXT_CAMERA), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_LR), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_UD), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_UP_ONLY), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_DOWN_ONLY), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_LEFT_ONLY), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_LOOK_RIGHT_ONLY), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_WEAPON_WHEEL_NEXT), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_WEAPON_WHEEL_PREV), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_SELECT_NEXT_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_SELECT_PREV_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_ATTACK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_ATTACK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_ATTACK2), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_PREV_RADIO_TRACK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_RADIO_WHEEL), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_PASSENGER_ATTACK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_SELECT_NEXT_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_SELECT_PREV_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_MOUSE_CONTROL_OVERRIDE), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_FLY_ATTACK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_FLY_SELECT_NEXT_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_FLY_ATTACK_CAMERA), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_MELEE_ATTACK_ALTERNATE), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_CURSOR_SCROLL_UP), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_ATTACK2), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_PREV_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_NEXT_WEAPON), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_DRIVE_LOOK), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_DRIVE_LOOK2), true);
+			PAD::DISABLE_CONTROL_ACTION(2, static_cast<int>(ControllerInputs::INPUT_VEH_FLY_ATTACK2), true);
 		}
 	}
 
