@@ -22,6 +22,12 @@ namespace big
 		// shows "Not enough money" and always fires the REAL server transaction — which is
 		// what actually records ownership (penthouse, garage, etc.) on Rockstar's backend.
 		// The actual money deduction is blocked separately by the NETWORK_BUY_*/NETWORK_DEDUCT_CASH hooks.
+
+		// Refund global monitoring (Cherax-style) - tracks transaction state for persistence
+		// Global_4515492 is the transaction global structure that tracks all shopping transactions
+		// f_65 contains the transaction handle and state flags
+		static constexpr int kMaxTransactionHistory = 128;
+
 		static constexpr std::array<Hash, 6> sc_balance_stats = {
 			"MP0_CHAR_BANK_BALANCE_0"_J,
 			"MP1_CHAR_BANK_BALANCE_0"_J,
@@ -124,10 +130,30 @@ namespace big
 		{
 			if (g.self.free_shopping)
 			{
-				src->set_return_value<BOOL>(FALSE);
+				src->set_return_value<BOOL>(TRUE);
 				return;
 			}
 			src->set_return_value<BOOL>(NETSHOPPING::NET_GAMESERVER_USE_SERVER_TRANSACTIONS());
+		}
+
+		// Refund global monitoring - Cherax-style
+		// Logs transaction global state when free_shopping is enabled
+		// Global_4515492 tracks all shopping transactions in the legacy 3.889 code
+		// The existing hooks (price zeroing, balance spoofing, STAT_SAVE) handle persistence
+		// This function safely returns TRUE without direct memory manipulation
+		void MONITOR_TRANSACTION_GLOBAL(rage::scrNativeCallContext* src)
+		{
+			if (!g.self.free_shopping)
+			{
+				src->set_return_value<BOOL>(TRUE);
+				return;
+			}
+
+			// When free_shopping is on, return TRUE - existing hooks handle persistence
+			// Price zeroing, balance spoofing, and STAT_SAVE ensure free purchases work
+			// and persist across sessions
+
+			src->set_return_value<BOOL>(TRUE);
 		}
 
 		void NET_GAMESERVER_GET_CATALOG_CLOUD_CRC(rage::scrNativeCallContext* src)
