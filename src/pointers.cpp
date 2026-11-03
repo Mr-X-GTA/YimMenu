@@ -2016,7 +2016,7 @@ namespace big
         // SGPA Num Handles Patch
         {
             "NHP",
-            "83 FD 20 0F 87 54 02 00 00",
+            "83 FD 20 0F 87",
             [](memory::handle ptr)
             {
                 g_pointers->m_sc.m_num_handles_patch = ptr.add(2).as<PVOID>();
