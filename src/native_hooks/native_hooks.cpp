@@ -4,6 +4,7 @@
 #include "am_launcher.hpp"
 #include "am_pi_menu.hpp"
 #include "creator.hpp"
+#include "free_shopping.hpp"
 #include "freemode.hpp"
 #include "network_session_host.hpp"
 #include "shop_controller.hpp"
@@ -142,6 +143,11 @@ namespace big
 		add_native_detour("tuneables_processing"_J, NativeIndex::_NETWORK_GET_TUNABLES_REGISTRATION_INT, tunables::_NETWORK_GET_TUNABLES_REGISTRATION_INT);
 		add_native_detour("tuneables_processing"_J, NativeIndex::_NETWORK_GET_TUNABLES_REGISTRATION_BOOL, tunables::_NETWORK_GET_TUNABLES_REGISTRATION_BOOL);
 		add_native_detour("tuneables_processing"_J, NativeIndex::_NETWORK_GET_TUNABLES_REGISTRATION_FLOAT, tunables::_NETWORK_GET_TUNABLES_REGISTRATION_FLOAT);
+
+		add_native_detour(NativeIndex::NET_GAMESERVER_BASKET_START, free_shopping::NET_GAMESERVER_BASKET_START);
+		add_native_detour(NativeIndex::NET_GAMESERVER_BASKET_ADD_ITEM, free_shopping::NET_GAMESERVER_BASKET_ADD_ITEM);
+		add_native_detour(NativeIndex::USE_FAKE_MP_CASH, free_shopping::USE_FAKE_MP_CASH);
+		add_native_detour(NativeIndex::CHANGE_FAKE_MP_CASH, free_shopping::CHANGE_FAKE_MP_CASH);
 
 		// TODO: is this safe?
 		add_native_detour("am_mp_hacker_den"_J, NativeIndex::FORCE_PED_AI_AND_ANIMATION_UPDATE, all_scripts::DO_NOTHING); //Fix jittering weapons.

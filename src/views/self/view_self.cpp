@@ -42,6 +42,7 @@ namespace big
 		if (g.self.invisibility)
 			components::command_checkbox<"localvis">(); // TODO: does nothing in SP
 		components::command_checkbox<"gracefullanding">();
+		components::command_checkbox<"freeshopping">();
 
 		// clang-format off
 		ImGui::BeginDisabled(!*g_pointers->m_gta.m_is_session_started ||
